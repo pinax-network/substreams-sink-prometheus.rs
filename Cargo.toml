@@ -1,0 +1,19 @@
+[package]
+name = "substreams-sink-prometheus"
+version = "0.1.0"
+authors = ["Charles <charles@pinax.network>", "Denis <denis@pinax.network>", "Fred <fred@pinax.network>"]
+description = "Substreams Sink to Prometheus"
+homepage = "https://github.com/pinax-network/substreams-sink-prometheus"
+repository = "https://github.com/pinax-network/substreams-sink-prometheus"
+readme = "README.md"
+keywords = [ "substreams", "streamingfast", "firehose", "thegraph", "sink"]
+categories = ["api-bindings", "external-ffi-bindings", "wasm"]
+license = "MIT OR Apache-2.0"
+edition = "2021"
+
+[badges]
+maintenance = { status = "actively-developed" }
+
+[dependencies]
+prost = "0.11"
+prost-types = "0.11"

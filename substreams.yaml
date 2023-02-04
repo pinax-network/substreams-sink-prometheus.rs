@@ -1,0 +1,12 @@
+specVersion: v0.1.0
+package:
+  name: substreams_sink_prometheus
+  version: v0.1.0
+  url: https://github.com/pinax-network/substreams-sink-prometheus
+  doc: Substreams Sink to Prometheus
+
+protobuf:
+  files:
+    - prometheus.proto
+  importPaths:
+    - ./proto/substreams/sink/prometheus/v1

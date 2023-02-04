@@ -1,8 +1,8 @@
 [package]
 name = "substreams-sink-prometheus"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Charles <charles@pinax.network>", "Denis <denis@pinax.network>", "Fred <fred@pinax.network>"]
-description = "Substreams Sink to Prometheus"
+description = "Substreams Prometheus sink module"
 homepage = "https://github.com/pinax-network/substreams-sink-prometheus"
 repository = "https://github.com/pinax-network/substreams-sink-prometheus"
 readme = "README.md"

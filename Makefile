@@ -1,6 +1,5 @@
 .PHONY: all
 all:
-	make protogen
 	make build
 	make test
 	make pack

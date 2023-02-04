@@ -8,7 +8,7 @@
 //!
 //! ## 🛠 Feature Roadmap
 //! 
-//! [**Gauge**](https://pkg.go.dev/github.com/prometheus/client_golang/prometheus#Gauge)
+//! ### [Prometheus Gauge](https://pkg.go.dev/github.com/prometheus/client_golang/prometheus#Gauge)
 //! - [x] Set
 //! - [x] Inc
 //! - [x] Dec

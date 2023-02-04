@@ -17,16 +17,13 @@
 
 ## 🛠 Feature Roadmap
 
-- [ ] [Counter](https://pkg.go.dev/github.com/prometheus/client_golang/prometheus#Counter)
-  - [ ] Inc
-  - [ ] Add
-- [ ] [Gauge](https://pkg.go.dev/github.com/prometheus/client_golang/prometheus#Gauge)
-  - [ ] Set
-  - [ ] Inc
-  - [ ] Dec
-  - [ ] Add
-  - [ ] Sub
-  - [ ] SetToCurrentTime
+[**Gauge**](https://pkg.go.dev/github.com/prometheus/client_golang/prometheus#Gauge)
+- [x] Set
+- [x] Inc
+- [x] Dec
+- [x] Add
+- [x] Sub
+- [x] SetToCurrentTime
 
 ## Install
 
@@ -56,9 +53,12 @@ fn map_action_traces(
 
     let mut prom_ops: PrometheusOperations = Default::default();
 
-    // process your data, push to Prometheus
-    prom_ops.push_new(someKey, someValue, ordinal);
-    prom_ops.push_delete(anotherKey, anotherOrdinal);
+    // process your data, push to Prometheus metrics
+    prom_ops.push_set(vec!["some_key"], 123.456);
+    prom_ops.push_inc(vec!["increment_key"]);
+    prom_ops.push_dec(vec!["decrement_key"]);
+    prom_ops.push_add(vec!["add_key"], 2.0);
+    prom_ops.push_sub(vec!["substract_key"], 100.0);
 
     Ok(prom_ops)
 }

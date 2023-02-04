@@ -10,9 +10,9 @@ message PrometheusOperations {
 }
 
 message PrometheusOperation {
-  string key = 1;
-  bytes value = 2;
-  uint64 ordinal = 3;
+  repeated string labels = 1;
+  double value = 2;
+  // uint64 ordinal = 3;
   enum Type {
     // Protobuf default should not be used, this is used so that the consume can ensure that the value was actually specified
     UNSET = 0;

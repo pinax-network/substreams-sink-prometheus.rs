@@ -57,11 +57,11 @@ fn prom_out(
     let mut prom_ops: PrometheusOperations = Default::default();
 
     // process your data, push to Prometheus metrics
-    prom_ops.push_set(vec!["some_key"], 123.456);
-    prom_ops.push_inc(vec!["increment_key"]);
-    prom_ops.push_dec(vec!["decrement_key"]);
-    prom_ops.push_add(vec!["add_key"], 2.0);
-    prom_ops.push_sub(vec!["substract_key"], 100.0);
+    prom_ops.push_set("gauge_name".to_owned(), Some("Gauge Help".to_owned()), vec!["some_key"], 123.456);
+    prom_ops.push_inc("gauge_name".to_owned(), Some("Gauge Help".to_owned()), vec!["increment_key"]);
+    prom_ops.push_dec("gauge_name".to_owned(), Some("Gauge Help".to_owned()), vec!["decrement_key"]);
+    prom_ops.push_add("gauge_name".to_owned(), Some("Gauge Help".to_owned()), vec!["add_key"], 2.0);
+    prom_ops.push_sub("gauge_name".to_owned(), Some("Gauge Help".to_owned()), vec!["substract_key"], 100.0);
 
     Ok(prom_ops)
 }

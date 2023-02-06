@@ -7,7 +7,7 @@
 //! > `substreams-sink-prom` is a tool that allows developers to pipe metrics extracted from a blockchain into a Prometheus time series database.
 //!
 //! ## 🛠 Feature Roadmap
-//! 
+//!
 //! ### [Prometheus Gauge](https://pkg.go.dev/github.com/prometheus/client_golang/prometheus#Gauge)
 //! - [x] Set
 //! - [x] Inc
@@ -15,12 +15,12 @@
 //! - [x] Add
 //! - [x] Sub
 //! - [x] SetToCurrentTime
-//! 
+//!
 //! ### Example
 //! ```
 //! use substreams_sink_prometheus::PrometheusOperations;
 //! let mut prom_ops: PrometheusOperations = Default::default();
-//! prom_ops.push_set(vec!["some_key"], 123.456);
+//! prom_ops.push_set("gauge_name".to_owned(), Some("Gauge Help".to_owned()), vec!["some_key"], 123.456);
 //! ```
 
 #[path = "pb/pinax.substreams.sink.prometheus.v1.rs"]

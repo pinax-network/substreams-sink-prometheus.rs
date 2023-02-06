@@ -1,0 +1,27 @@
+{
+    "private": true,
+    "name": "substreams-sink-prometheus",
+    "version": "0.1.1",
+    "description": "Substreams Prometheus sink module",
+    "main": "index.js",
+    "repository": "git@github.com:pinax-network/substreams-sink-prometheus.git",
+    "author": "Denis <denis@pinax.network>",
+    "bin": "index.js",
+    "license": "MIT OR Apache-2.0",
+    "scripts": {
+        "start": "ts-node-dev index.ts",
+        "build": "tsc && pkg ."
+    },
+    "dependencies": {
+        "dotenv": "*",
+        "prom-client": "14.x",
+        "substreams": "^0.3.0",
+        "typed-emitter": "^2.1.0",
+        "winston": "3.x"
+    },
+    "devDependencies": {
+        "pkg": "5.x",
+        "ts-node-dev": "*",
+        "typescript": "4.x"
+    }
+}

@@ -51,8 +51,9 @@ message Operation {
 message PrometheusOperation {
   string name = 1;                // Name of the Prometheus metric
   Metric.Type metric = 2;         // Prometheus metric type (ex: GAUGE, COUNTER)
-  Operation.Type operation = 3;   // Prometheus operation type (ex: SET, INC, ADD, SUB)
-  double value = 4;               // Value (Float) to be used in the operation
+  Operation.Type type = 3;        // Prometheus operation type (ex: SET, INC, ADD, SUB)
+  optional double value = 4;      // Value (Float) to be used in the operation
   repeated string labels = 5;     // Labels to be used in the Gauge or Counter
   optional string help = 6;       // Help text to be used to define Gauge or Counter
+  // repeated string registers = 7;  // TO-DO
 }

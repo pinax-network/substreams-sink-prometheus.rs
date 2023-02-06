@@ -18,13 +18,41 @@
 
 ## 🛠 Feature Roadmap
 
-### [Prometheus Gauge](https://pkg.go.dev/github.com/prometheus/client_golang/prometheus#Gauge)
+### [Gauge Metric](https://pkg.go.dev/github.com/prometheus/client_golang/prometheus#Gauge)
 - [x] Set
 - [x] Inc
 - [x] Dec
 - [x] Add
 - [x] Sub
 - [x] SetToCurrentTime
+
+### [Counter Metric](https://pkg.go.dev/github.com/prometheus/client_golang/prometheus#Counter)
+- [x] Inc
+- [x] Add
+
+### [Histogram Metric](https://pkg.go.dev/github.com/prometheus/client_golang/prometheus#Histogram)
+- [ ] Observe
+- [ ] buckets
+- [ ] zero
+
+### [Summary Metric](https://pkg.go.dev/github.com/prometheus/client_golang/prometheus#Summary)
+> Summaries calculate percentiles of observed values.
+- [ ] Observe
+- [ ] percentiles
+- [ ] maxAgeSeconds
+- [ ] ageBuckets
+- [ ] startTimer
+
+### [Registry](https://pkg.go.dev/github.com/prometheus/client_golang/prometheus#Registry)
+- [ ] Clear
+- [ ] SetDefaultLabels
+- [ ] RemoveSingleMetric
+
+### [Prometheus Pushgateway](https://github.com/prometheus/pushgateway)
+> Push acceptor for ephemeral and batch jobs.
+- [ ] pushAdd
+- [ ] push
+- [ ] delete
 
 ## Install
 
@@ -56,12 +84,24 @@ fn prom_out(
 
     let mut prom_ops: PrometheusOperations = Default::default();
 
+    // Gauge Metric
+    // ============
+    // SET Gauge to an arbitrary value.
+    prom_ops.push_set("gauge_name", 123.456, vec![], None);
+    
+    // Adds an arbitrary value to a Gauge. (The value can be negative, resulting in a decrease of the Gauge.)
+    prom_ops.push_add("gauge_name", 123.456, vec![], None);
+
+    // SET Gauge using labels & help documentation
+    prom_ops.push_set("custom_gauge", 50.0, vec!["custom_label"], Some("Gauge documentation"));
+
+    // Counter Metric
+    // ==============
     // process your data, push to Prometheus metrics
-    prom_ops.push_set("gauge_name".to_owned(), Some("Gauge Help".to_owned()), vec!["some_key"], 123.456);
-    prom_ops.push_inc("gauge_name".to_owned(), Some("Gauge Help".to_owned()), vec!["increment_key"]);
-    prom_ops.push_dec("gauge_name".to_owned(), Some("Gauge Help".to_owned()), vec!["decrement_key"]);
-    prom_ops.push_add("gauge_name".to_owned(), Some("Gauge Help".to_owned()), vec!["add_key"], 2.0);
-    prom_ops.push_sub("gauge_name".to_owned(), Some("Gauge Help".to_owned()), vec!["substract_key"], 100.0);
+    prom_ops.push_counter_inc("counter_name", vec![], None);
+
+    // Adds an arbitrary value to a Counter. (Returns an error if the value is < 0.)
+    prom_ops.push_counter_add("counter_name", 123.456, vec![], None);
 
     Ok(prom_ops)
 }

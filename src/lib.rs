@@ -45,22 +45,34 @@
 //!
 //! // Gauge Metric
 //! // ============
-//! // SET Gauge to an arbitrary value.
-//! prom_ops.push_set("gauge_name", 123.456, vec![], None);
+//! // Sets the Gauge to an arbitrary value.
+//! prom_ops.push_set("gauge_name", 123.456, vec![]);
+//! prom_ops.push_set("gauge_custom", 888.8, vec!["custom_label"]);
+//! 
+//! // Increments the Gauge by 1.
+//! prom_ops.push_inc("gauge_name", vec![]);
+//! 
+//! // Decrements the Gauge by 1.
+//! prom_ops.push_dec("gauge_name", vec![]);
 //! 
 //! // Adds an arbitrary value to a Gauge. (The value can be negative, resulting in a decrease of the Gauge.)
-//! prom_ops.push_add("gauge_name", 123.456, vec![], None);
+//! prom_ops.push_add("gauge_name", 50.0, vec![]);
+//! prom_ops.push_add("gauge_name", -10.0, vec![]);
 //! 
-//! // SET Gauge using labels & help documentation
-//! prom_ops.push_set("custom_gauge", 50.0, vec!["custom_label"], Some("Gauge documentation"));
+//! // Subtracts arbitrary value from the Gauge. (The value can be negative, resulting in an increase of the Gauge.)
+//! prom_ops.push_sub("gauge_name", 25.0, vec![]);
+//! prom_ops.push_sub("gauge_name", -5.0, vec![]);
+//! 
+//! // Set Gauge to the current Unix time in seconds.
+//! prom_ops.push_set_to_current_time("gauge_name", vec![]);
 //! 
 //! // Counter Metric
 //! // ==============
 //! // process your data, push to Prometheus metrics
-//! prom_ops.push_counter_inc("counter_name", vec![], None);
+//! prom_ops.push_counter_inc("counter_name", vec![]);
 //! 
 //! // Adds an arbitrary value to a Counter. (Returns an error if the value is < 0.)
-//! prom_ops.push_counter_add("counter_name", 123.456, vec![], None);
+//! prom_ops.push_counter_add("counter_name", 123.456, vec![]);
 //! ```
 
 #[path = "pb/pinax.substreams.sink.prometheus.v1.rs"]

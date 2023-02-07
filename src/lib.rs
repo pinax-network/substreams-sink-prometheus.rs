@@ -37,12 +37,6 @@
 //! - [ ] Clear
 //! - [ ] SetDefaultLabels
 //! - [ ] RemoveSingleMetric
-//! 
-//! ### Prometheus Pushgateway
-//! > Push acceptor for ephemeral and batch jobs.
-//! - [ ] pushAdd
-//! - [ ] push
-//! - [ ] delete
 //!
 //! ### Example
 //! ```

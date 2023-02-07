@@ -48,12 +48,6 @@
 - [ ] SetDefaultLabels
 - [ ] RemoveSingleMetric
 
-### [Prometheus Pushgateway](https://github.com/prometheus/pushgateway)
-> Push acceptor for ephemeral and batch jobs.
-- [ ] pushAdd
-- [ ] push
-- [ ] delete
-
 ## Install
 
 ```

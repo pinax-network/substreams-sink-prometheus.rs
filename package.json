@@ -13,6 +13,7 @@
         "build": "tsc && pkg ."
     },
     "dependencies": {
+        "commander": "^10.0.0",
         "dotenv": "*",
         "prom-client": "14.x",
         "substreams": "^0.3.0",

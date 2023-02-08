@@ -1,6 +1,6 @@
-use crate::{Metrics, Metric};
+use crate::{PrometheusOperations, PrometheusOperation, Operations, Metrics};
 
-impl Metrics {
+impl PrometheusOperations {
     /// Increments the Counter by 1.
     ///
     /// ### Example
@@ -12,9 +12,9 @@ impl Metrics {
     /// prom_ops.push_counter_inc("custom_counter", vec!["custom_label"]);
     /// ```
     pub fn push_counter_inc(&mut self, name: &str, labels: Vec<&str>) {
-        self.metrics.push(Metric {
-            r#type: "COUNTER".to_owned(), 
-            operation: "INC".to_owned(),
+        self.operations.push(PrometheusOperation {
+            metric: Metrics::Counter.into(), 
+            operation: Operations::Inc.into(),
             name: name.to_owned(),
             value: 1.0,
             labels: vec_to_string(labels),
@@ -31,9 +31,9 @@ impl Metrics {
     /// prom_ops.push_counter_add("counter_name", 123.456, vec!["custom_label"]);
     /// ```
     pub fn push_counter_add(&mut self, name: &str, value: f64, labels: Vec<&str>) {
-        self.metrics.push(Metric {
-            r#type: "COUNTER".to_owned(),
-            operation: "ADD".to_owned(),
+        self.operations.push(PrometheusOperation {
+            metric: Metrics::Counter.into(),
+            operation: Operations::Add.into(),
             name: name.to_owned(),
             value: value,
             labels: vec_to_string(labels),
@@ -51,9 +51,9 @@ impl Metrics {
     /// prom_ops.push_set_to_current_time("gauge_name", vec!["custom_label"]);
     /// ```
     pub fn push_counter_set_to_current_time(&mut self, name: &str, labels: Vec<&str>) {
-        self.metrics.push(Metric {
-            r#type: "COUNTER".to_owned(),
-            operation: "SET_TO_CURRENT_TIME".to_owned(),
+        self.operations.push(PrometheusOperation {
+            metric: Metrics::Counter.into(),
+            operation: Operations::SetToCurrentTime.into(),
             name: name.to_owned(),
             value: f64::NAN,
             labels: vec_to_string(labels),

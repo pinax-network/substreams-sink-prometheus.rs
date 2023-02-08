@@ -1,6 +1,6 @@
-use crate::pb::{Metrics, Metric};
+use crate::{PrometheusOperations, PrometheusOperation, Operations, Metrics};
 
-impl Metrics {
+impl PrometheusOperations {
     /// Sets the Gauge to an arbitrary value.
     ///
     /// ### Example
@@ -13,9 +13,9 @@ impl Metrics {
     /// prom_ops.push_set("gauge_custom", 888.8, vec!["custom_label"]);
     /// ```
     pub fn push_set(&mut self, name: &str, value: f64, labels: Vec<&str>) {
-        self.metrics.push(Metric {
-            r#type: "GAUGE".to_owned(),
-            operation: "SET".to_owned(),
+        self.operations.push(PrometheusOperation {
+            metric: Metrics::Gauge.into(),
+            operation: Operations::Set.into(),
             name: name.to_owned(),
             value,
             labels: vec_to_string(labels),
@@ -33,9 +33,9 @@ impl Metrics {
     /// prom_ops.push_inc("gauge_name", vec![]);
     /// ```
     pub fn push_inc(&mut self, name: &str, labels: Vec<&str>) {
-        self.metrics.push(Metric {
-            r#type: "GAUGE".to_owned(),
-            operation: "INC".to_owned(),
+        self.operations.push(PrometheusOperation {
+            metric: Metrics::Gauge.into(),
+            operation: Operations::Inc.into(),
             name: name.to_owned(),
             value: 1.0,
             labels: vec_to_string(labels),
@@ -53,9 +53,9 @@ impl Metrics {
     /// prom_ops.push_dec("gauge_name", vec![]);
     /// ```
     pub fn push_dec(&mut self, name: &str, labels: Vec<&str>) {
-        self.metrics.push(Metric {
-            r#type: "GAUGE".to_owned(),
-            operation: "SET".to_owned(),
+        self.operations.push(PrometheusOperation {
+            metric: Metrics::Gauge.into(),
+            operation: Operations::Dec.into(),
             name: name.to_owned(),
             value: 1.0,
             labels: vec_to_string(labels),
@@ -73,9 +73,9 @@ impl Metrics {
     /// prom_ops.push_add("gauge_name", -10.0, vec![]);
     /// ```
     pub fn push_add(&mut self, name: &str, value: f64, labels: Vec<&str>) {
-        self.metrics.push(Metric {
-            r#type: "GAUGE".to_owned(),
-            operation: "ADD".to_owned(),
+        self.operations.push(PrometheusOperation {
+            metric: Metrics::Gauge.into(),
+            operation: Operations::Add.into(),
             name: name.to_owned(),
             value,
             labels: vec_to_string(labels),
@@ -94,9 +94,9 @@ impl Metrics {
     /// prom_ops.push_sub("gauge_name", -5.0, vec![]);
     /// ```
     pub fn push_sub(&mut self, name: &str, value: f64, labels: Vec<&str>) {
-        self.metrics.push(Metric {
-            r#type: "GAUGE".to_owned(),
-            operation: "SUB".to_owned(),
+        self.operations.push(PrometheusOperation {
+            metric: Metrics::Gauge.into(),
+            operation: Operations::Sub.into(),
             name: name.to_owned(),
             value,
             labels: vec_to_string(labels),
@@ -114,9 +114,9 @@ impl Metrics {
     /// prom_ops.push_set_to_current_time("gauge_name", vec![]);
     /// ```
     pub fn push_set_to_current_time(&mut self, name: &str, labels: Vec<&str>) {
-        self.metrics.push(Metric {
-            r#type: "GAUGE".to_owned(),
-            operation: "SET_TO_CURRENT_TIME".to_owned(),
+        self.operations.push(PrometheusOperation {
+            metric: Metrics::Gauge.into(),
+            operation: Operations::SetToCurrentTime.into(),
             name: name.to_owned(),
             value: f64::NAN,
             labels: vec_to_string(labels),

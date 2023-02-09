@@ -8,10 +8,10 @@ export function run(args: {
     substreamsEndpoint?: string,
 } = {}) {
     // User params
-    const spkg = "https://github.com/pinax-network/substreams/releases/download/eosmechanics-v0.2.0/eosmechanics-v0.2.0.spkg";
+    const spkg = "https://github.com/pinax-network/substreams/releases/download/eosmechanics-v0.3.1/eosmechanics-v0.3.1.spkg";
     const messageTypeName = "pinax.substreams.sink.prometheus.v1.PrometheusOperations";
     const outputModule = args.outputModule ?? "prom_out";
-    const startBlockNum = args.startBlockNum ?? "0";
+    const startBlockNum = args.startBlockNum ?? "292442484";
     const host = args.substreamsEndpoint ?? "mainnet.eth.streamingfast.io:443";
 
     console.log(args)

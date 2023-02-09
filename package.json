@@ -10,8 +10,14 @@
         "email": "denis@pinax.network"
     },
     "contributors": [
-        { "name": "Denis", "email": "denis@pinax.network" },
-        { "name": "Charles", "email": "charles@pinax.network" }
+        {
+            "name": "Denis",
+            "email": "denis@pinax.network"
+        },
+        {
+            "name": "Charles",
+            "email": "charles@pinax.network"
+        }
     ],
     "bin": "index.js",
     "license": "MIT OR Apache-2.0",
@@ -23,13 +29,13 @@
         "commander": "10.x",
         "dotenv": "*",
         "prom-client": "14.x",
-        "substreams": "*",
+        "substreams": "^0.3.1",
         "winston": "3.x"
     },
     "devDependencies": {
-        "typed-emitter": "2.x",
         "pkg": "5.x",
         "ts-node-dev": "*",
+        "typed-emitter": "2.x",
         "typescript": "4.x"
     }
 }

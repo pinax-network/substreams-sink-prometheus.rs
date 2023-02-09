@@ -7,6 +7,13 @@ pub struct Counter {
 }
 
 impl Counter {
+    /// Create new Counter
+    ///
+    /// ### Example
+    /// ```
+    /// use substreams_sink_prometheus::Counter;
+    /// let mut counter = Counter::new("counter_name");
+    /// ```
     #[must_use]
     pub fn new(name: &str) -> Self {
         Self{
@@ -15,10 +22,26 @@ impl Counter {
         }
     }
 
+    /// Set label to Counter
+    ///
+    /// ### Example
+    /// ```
+    /// use substreams_sink_prometheus::Counter;
+    /// let mut counter = Counter::new("counter_name");
+    /// counter.set_label("custom_label");
+    /// ```
     pub fn set_label(&mut self, label: &str) {
         self.labels = vec![label.to_owned()];
     }
 
+    /// Set labels to Counter
+    ///
+    /// ### Example
+    /// ```
+    /// use substreams_sink_prometheus::Counter;
+    /// let mut counter = Counter::new("counter_name");
+    /// counter.set_labels(vec!["custom_label_1", "custom_label_2"]);
+    /// ```
     pub fn set_labels(&mut self, labels: Vec<&str>) {
         self.labels = labels.iter().map(|s| s.to_string()).collect();
     }
@@ -29,12 +52,7 @@ impl Counter {
     /// ```
     /// use substreams_sink_prometheus::{PrometheusOperations, Counter};
     /// let mut prom_ops: PrometheusOperations = Default::default();
-    ///
-    /// // INC Counter by 1
-    /// prom_ops.operations.push(Counter{
-    ///     name: "custom_counter".to_owned(),
-    ///     labels: vec!["custom_label".to_owned()]
-    /// }.inc());
+    /// prom_ops.push(Counter::new("counter_name").inc());
     /// ```
     pub fn inc(&mut self) -> PrometheusOperation {
         PrometheusOperation {
@@ -52,12 +70,7 @@ impl Counter {
     /// ```
     /// use substreams_sink_prometheus::{PrometheusOperations, Counter};
     /// let mut prom_ops: PrometheusOperations = Default::default();
-    ///
-    /// // ADD Counter by arbitrary value
-    /// prom_ops.operations.push(Counter{
-    ///     name: "custom_counter".to_owned(),
-    ///     labels: vec!["custom_label".to_owned()]
-    /// }.add(123.456));
+    /// prom_ops.push(Counter::new("counter_name").add(123.456));
     /// ```
     pub fn add(&mut self, value: f64) -> PrometheusOperation {
         PrometheusOperation {
@@ -75,12 +88,7 @@ impl Counter {
     /// ```
     /// use substreams_sink_prometheus::{PrometheusOperations, Counter};
     /// let mut prom_ops: PrometheusOperations = Default::default();
-    ///
-    /// // Set Gauge to the current Unix time in seconds.
-    /// prom_ops.operations.push(Counter{
-    ///     name: "custom_counter".to_owned(),
-    ///     labels: vec!["custom_label".to_owned()]
-    /// }.set_to_current_time());
+    /// prom_ops.push(Counter::new("counter_name").set_to_current_time());
     /// ```
     pub fn set_to_current_time(&mut self) -> PrometheusOperation {
         PrometheusOperation {
@@ -100,39 +108,9 @@ mod tests {
 
     #[test]
     fn test_counter() {
-
         let mut prom_ops: PrometheusOperations = Default::default();
-
-        prom_ops.operations.push(Counter{
-            name: "custom_counter".to_owned(),
-            labels: vec!["custom_label".to_owned()]
-        }.inc());
-
-        assert_eq!(prom_ops.operations.len(), 1);
-    }
-
-    #[test]
-    fn test_counter_push() {
-        let mut prom_ops: PrometheusOperations = Default::default();
-        let mut counter = Counter{
-            name: "custom_counter".to_owned(),
-            labels: vec!["custom_label".to_owned()]
-        };
-        prom_ops.operations.push(counter.inc());
-        prom_ops.operations.push(counter.add(123.456));
-
+        prom_ops.push(Counter::new("a").inc());
+        prom_ops.push(Counter::new("b").add(123.456));
         assert_eq!(prom_ops.operations.len(), 2);
     }
-
-    #[test]
-    fn test_counter_new() {
-        let mut prom_ops: PrometheusOperations = Default::default();
-        let mut counter = Counter::new("custom_counter");
-        counter.set_label("custom_label");
-        prom_ops.push(counter.inc());
-        prom_ops.push(counter.add(123.456));
-
-        assert_eq!(prom_ops.operations.len(), 2);
-    }
-
 }

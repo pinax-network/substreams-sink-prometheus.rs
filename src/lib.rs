@@ -42,7 +42,7 @@
 //! ```
 //! use std::collections::HashMap;
 //! use substreams_sink_prometheus::{PrometheusOperations, Gauge, Counter};
-//! 
+//!
 //! // Initialize Prometheus Operations container
 //! let mut prom_ops: PrometheusOperations = Default::default();
 //!
@@ -50,7 +50,7 @@
 //! // ==============
 //! // Initialize Gauge with a name & labels
 //! let mut counter = Counter::from("counter_name");
-//! 
+//!
 //! // Increments the Counter by 1.
 //! prom_ops.push(counter.inc());
 //!

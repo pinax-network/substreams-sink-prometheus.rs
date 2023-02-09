@@ -1,7 +1,7 @@
 #[cfg(test)]
 mod tests {
+    use crate::{Counter, PrometheusOperations};
     use std::collections::HashMap;
-    use crate::{PrometheusOperations, Counter};
 
     #[test]
     fn test_labels_counter_1() {
@@ -20,7 +20,6 @@ mod tests {
         let counter = Counter::from("custom_counter");
         prom_ops.push(counter.with(labels).inc());
     }
-
 
     #[test]
     fn test_labels_counter_3() {

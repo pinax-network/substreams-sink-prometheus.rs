@@ -2,26 +2,27 @@
 /// List of Prometheus metrics
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct PrometheusOperations {
-    #[prost(message, repeated, tag="1")]
+    #[prost(message, repeated, tag = "1")]
     pub operations: ::prost::alloc::vec::Vec<PrometheusOperation>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct PrometheusOperation {
     /// Prometheus metric type (COUNTER, GAUGE, HISTOGRAM, SUMMARY)
-    #[prost(enumeration="Metrics", tag="1")]
+    #[prost(enumeration = "Metrics", tag = "1")]
     pub metric: i32,
     /// Prometheus metric operation (SET, INC, DEC, ADD, SUB, SET_TO_CURRENT_TIME, RESET)
-    #[prost(enumeration="Operations", tag="2")]
+    #[prost(enumeration = "Operations", tag = "2")]
     pub operation: i32,
     /// Name of the Prometheus metric
-    #[prost(string, tag="3")]
+    #[prost(string, tag = "3")]
     pub name: ::prost::alloc::string::String,
     /// Value (Float) to be used in the operation
-    #[prost(double, tag="4")]
+    #[prost(double, tag = "4")]
     pub value: f64,
     /// Labels to be used in Metric
-    #[prost(map="string, string", tag="5")]
-    pub labels: ::std::collections::HashMap<::prost::alloc::string::String, ::prost::alloc::string::String>,
+    #[prost(map = "string, string", tag = "5")]
+    pub labels:
+        ::std::collections::HashMap<::prost::alloc::string::String, ::prost::alloc::string::String>,
 }
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
@@ -42,7 +43,7 @@ pub enum Metrics {
 pub enum Operations {
     /// Protobuf default should not be used, this is used so that the consume can ensure that the value was actually specified
     Unspecified = 0,
-    /// Set sets the Gauge to an arbitrary value. 
+    /// Set sets the Gauge to an arbitrary value.
     ///
     /// float
     Set = 1,

@@ -2,7 +2,7 @@ import client from "prom-client";
 import http from "node:http";
 
 // Prometheus Exporter
-const register = new client.Registry();
+export const register = new client.Registry();
 const collectDefaultMetrics = client.collectDefaultMetrics;
 collectDefaultMetrics({ register });
 

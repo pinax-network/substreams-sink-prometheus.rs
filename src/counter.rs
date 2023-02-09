@@ -14,6 +14,7 @@ impl Counter {
     /// use substreams_sink_prometheus::Counter;
     /// let mut counter = Counter::new("counter_name");
     /// ```
+    #[inline]
     #[must_use]
     pub fn new(name: &str) -> Self {
         Self{
@@ -30,6 +31,8 @@ impl Counter {
     /// let mut counter = Counter::new("counter_name");
     /// counter.set_label("custom_label");
     /// ```
+    #[inline]
+    #[must_use]
     pub fn set_label(&mut self, label: &str) {
         self.labels = vec![label.to_owned()];
     }
@@ -42,6 +45,8 @@ impl Counter {
     /// let mut counter = Counter::new("counter_name");
     /// counter.set_labels(vec!["custom_label_1", "custom_label_2"]);
     /// ```
+    #[inline]
+    #[must_use]
     pub fn set_labels(&mut self, labels: Vec<&str>) {
         self.labels = labels.iter().map(|s| s.to_string()).collect();
     }
@@ -54,6 +59,8 @@ impl Counter {
     /// let mut prom_ops: PrometheusOperations = Default::default();
     /// prom_ops.push(Counter::new("counter_name").inc());
     /// ```
+    #[inline]
+    #[must_use]
     pub fn inc(&mut self) -> PrometheusOperation {
         PrometheusOperation {
             metric: Metrics::Counter.into(), 
@@ -72,6 +79,8 @@ impl Counter {
     /// let mut prom_ops: PrometheusOperations = Default::default();
     /// prom_ops.push(Counter::new("counter_name").add(123.456));
     /// ```
+    #[inline]
+    #[must_use]
     pub fn add(&mut self, value: f64) -> PrometheusOperation {
         PrometheusOperation {
             metric: Metrics::Counter.into(),
@@ -90,6 +99,8 @@ impl Counter {
     /// let mut prom_ops: PrometheusOperations = Default::default();
     /// prom_ops.push(Counter::new("counter_name").set_to_current_time());
     /// ```
+    #[inline]
+    #[must_use]
     pub fn set_to_current_time(&mut self) -> PrometheusOperation {
         PrometheusOperation {
             metric: Metrics::Counter.into(),

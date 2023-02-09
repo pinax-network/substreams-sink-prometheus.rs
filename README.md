@@ -69,7 +69,7 @@ substreams-sink-prometheus = "0.1"
 ```rust
 use substreams::prelude::*;
 use substreams::errors::Error;
-use substreams_sink_prometheus::PrometheusOperations;
+use substreams_sink_prometheus::{PrometheusOperations, Counter, Gauge};
 
 #[substreams::handlers::map]
 fn prom_out(
@@ -80,34 +80,41 @@ fn prom_out(
 
     // Gauge Metric
     // ============
+    // Initialize Gauge with a name & labels
+    let mut gauge = Gauge::new("gauge_name");
+    gauge.set_label("custom_label");
+
     // Sets the Gauge to an arbitrary value.
-    prom_ops.push_set("gauge_name", 123.456, vec![]);
-    prom_ops.push_set("gauge_custom", 888.8, vec!["custom_label"]);
+    prom_ops.push(gauge.set(88.8));
 
     // Increments the Gauge by 1.
-    prom_ops.push_inc("gauge_name", vec![]);
+    prom_ops.push(gauge.inc());
 
     // Decrements the Gauge by 1.
-    prom_ops.push_dec("gauge_name", vec![]);
-    
+    prom_ops.push(gauge.dec());
+
     // Adds an arbitrary value to a Gauge. (The value can be negative, resulting in a decrease of the Gauge.)
-    prom_ops.push_add("gauge_name", 50.0, vec![]);
-    prom_ops.push_add("gauge_name", -10.0, vec![]);
+    prom_ops.push(gauge.add(50.0));
+    prom_ops.push(gauge.add(-10.0));
 
     // Subtracts arbitrary value from the Gauge. (The value can be negative, resulting in an increase of the Gauge.)
-    prom_ops.push_sub("gauge_name", 25.0, vec![]);
-    prom_ops.push_sub("gauge_name", -5.0, vec![]);
+    prom_ops.push(gauge.sub(25.0));
+    prom_ops.push(gauge.sub(-5.0));
 
     // Set Gauge to the current Unix time in seconds.
-    prom_ops.push_set_to_current_time("gauge_name", vec![]);
+    prom_ops.push(gauge.set_to_current_time());
 
     // Counter Metric
     // ==============
-    // process your data, push to Prometheus metrics
-    prom_ops.push_counter_inc("counter_name", vec![]);
+    // Increments the Counter by 1.
+    let mut counter = Counter::new("counter_name");
+    prom_ops.push(counter.inc());
 
     // Adds an arbitrary value to a Counter. (Returns an error if the value is < 0.)
-    prom_ops.push_counter_add("counter_name", 123.456, vec![]);
+    prom_ops.push(counter.add(123.456));
+
+    // Set Counter to the current Unix time in seconds.
+    prom_ops.push(counter.set_to_current_time());
 
     Ok(prom_ops)
 }

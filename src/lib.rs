@@ -41,6 +41,8 @@
 //! ### Example
 //! ```
 //! use substreams_sink_prometheus::{PrometheusOperations, Gauge, Counter};
+//! 
+//! // Initialize Prometheus Operations container
 //! let mut prom_ops: PrometheusOperations = Default::default();
 //!
 //! // Counter Metric

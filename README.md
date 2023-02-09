@@ -78,6 +78,15 @@ fn prom_out(
 
     let mut prom_ops: PrometheusOperations = Default::default();
 
+    // Counter Metric
+    // ==============
+    // Increments the Counter by 1.
+    let mut counter = Counter::new("counter_name");
+    prom_ops.push(counter.inc());
+
+    // Adds an arbitrary value to a Counter. (Returns an error if the value is < 0.)
+    prom_ops.push(counter.add(123.456));
+
     // Gauge Metric
     // ============
     // Initialize Gauge with a name & labels
@@ -103,18 +112,6 @@ fn prom_out(
 
     // Set Gauge to the current Unix time in seconds.
     prom_ops.push(gauge.set_to_current_time());
-
-    // Counter Metric
-    // ==============
-    // Increments the Counter by 1.
-    let mut counter = Counter::new("counter_name");
-    prom_ops.push(counter.inc());
-
-    // Adds an arbitrary value to a Counter. (Returns an error if the value is < 0.)
-    prom_ops.push(counter.add(123.456));
-
-    // Set Counter to the current Unix time in seconds.
-    prom_ops.push(counter.set_to_current_time());
 
     Ok(prom_ops)
 }

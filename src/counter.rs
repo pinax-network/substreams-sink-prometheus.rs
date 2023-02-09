@@ -88,26 +88,6 @@ impl Counter {
             labels: self.labels.to_owned(),
         }
     }
-
-    /// SetToCurrentTime sets the Gauge to the current Unix time in seconds.
-    ///
-    /// ### Example
-    /// ```
-    /// use substreams_sink_prometheus::{PrometheusOperations, Counter};
-    /// let mut prom_ops: PrometheusOperations = Default::default();
-    /// prom_ops.push(Counter::new("counter_name").set_to_current_time());
-    /// ```
-    #[inline]
-    #[must_use]
-    pub fn set_to_current_time(&mut self) -> PrometheusOperation {
-        PrometheusOperation {
-            metric: Metrics::Counter.into(),
-            operation: Operations::SetToCurrentTime.into(),
-            name: self.name.to_owned(),
-            value: f64::NAN,
-            labels: self.labels.to_owned(),
-        }
-    }
 }
 
 #[cfg(test)]

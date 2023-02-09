@@ -40,7 +40,7 @@
 //!
 //! ### Example
 //! ```
-//! use substreams_sink_prometheus::PrometheusOperations;
+//! use substreams_sink_prometheus::{PrometheusOperations, Counter};
 //! let mut prom_ops: PrometheusOperations = Default::default();
 //!
 //! // Gauge Metric
@@ -68,11 +68,17 @@
 //! 
 //! // Counter Metric
 //! // ==============
-//! // process your data, push to Prometheus metrics
-//! prom_ops.push_counter_inc("counter_name", vec![]);
+//! // Increments the Counter by 1.
+//! prom_ops.operations.push(Counter{
+//!     name: "custom_counter".to_owned(),
+//!     labels: vec!["custom_label".to_owned()]
+//! }.inc());
 //! 
 //! // Adds an arbitrary value to a Counter. (Returns an error if the value is < 0.)
-//! prom_ops.push_counter_add("counter_name", 123.456, vec![]);
+//! prom_ops.operations.push(Counter{
+//!     name: "custom_counter".to_owned(),
+//!     labels: vec!["custom_label".to_owned()]
+//! }.add(123.456));
 //! ```
 
 #[path = "pb/pinax.substreams.sink.prometheus.v1.rs"]
@@ -81,4 +87,6 @@ pub mod pb;
 pub use self::pb::*;
 
 mod counter;
+pub use self::counter::*;
 mod gauge;
+pub use self::gauge::*;

@@ -1,66 +1,111 @@
-use crate::{PrometheusOperations, PrometheusOperation, Operations, Metrics};
+use crate::{PrometheusOperation, Operations, Metrics};
 
-impl PrometheusOperations {
+#[derive(Debug, Clone, PartialEq)]
+pub struct Counter {
+    pub name: String,
+    pub labels: Vec<String>
+}
+
+impl Counter {
     /// Increments the Counter by 1.
     ///
     /// ### Example
     /// ```
-    /// use substreams_sink_prometheus::PrometheusOperations;
+    /// use substreams_sink_prometheus::{PrometheusOperations, Counter};
     /// let mut prom_ops: PrometheusOperations = Default::default();
     ///
     /// // INC Counter by 1
-    /// prom_ops.push_counter_inc("custom_counter", vec!["custom_label"]);
+    /// prom_ops.operations.push(Counter{
+    ///     name: "custom_counter".to_owned(),
+    ///     labels: vec!["custom_label".to_owned()]
+    /// }.inc());
     /// ```
-    pub fn push_counter_inc(&mut self, name: &str, labels: Vec<&str>) {
-        self.operations.push(PrometheusOperation {
+    pub fn inc(&mut self) -> PrometheusOperation {
+        PrometheusOperation {
             metric: Metrics::Counter.into(), 
             operation: Operations::Inc.into(),
-            name: name.to_owned(),
+            name: self.name.to_owned(),
             value: 1.0,
-            labels: vec_to_string(labels),
-        });
+            labels: self.labels.to_owned(),
+        }.clone()
     }
+
     /// Adds an arbitrary value to a Counter. (Returns an error if the value is < 0.)
     ///
     /// ### Example
     /// ```
-    /// use substreams_sink_prometheus::PrometheusOperations;
+    /// use substreams_sink_prometheus::{PrometheusOperations, Counter};
     /// let mut prom_ops: PrometheusOperations = Default::default();
     ///
     /// // ADD Counter by arbitrary value
-    /// prom_ops.push_counter_add("counter_name", 123.456, vec!["custom_label"]);
+    /// prom_ops.operations.push(Counter{
+    ///     name: "custom_counter".to_owned(),
+    ///     labels: vec!["custom_label".to_owned()]
+    /// }.add(123.456));
     /// ```
-    pub fn push_counter_add(&mut self, name: &str, value: f64, labels: Vec<&str>) {
-        self.operations.push(PrometheusOperation {
+    pub fn add(&mut self, value: f64) -> PrometheusOperation {
+        PrometheusOperation {
             metric: Metrics::Counter.into(),
             operation: Operations::Add.into(),
-            name: name.to_owned(),
+            name: self.name.to_owned(),
             value: value,
-            labels: vec_to_string(labels),
-        });
+            labels: self.labels.to_owned(),
+        }.clone()
     }
 
     /// SetToCurrentTime sets the Gauge to the current Unix time in seconds.
     ///
     /// ### Example
     /// ```
-    /// use substreams_sink_prometheus::PrometheusOperations;
+    /// use substreams_sink_prometheus::{PrometheusOperations, Counter};
     /// let mut prom_ops: PrometheusOperations = Default::default();
     ///
     /// // Set Gauge to the current Unix time in seconds.
-    /// prom_ops.push_set_to_current_time("gauge_name", vec!["custom_label"]);
+    /// prom_ops.operations.push(Counter{
+    ///     name: "custom_counter".to_owned(),
+    ///     labels: vec!["custom_label".to_owned()]
+    /// }.set_to_current_time());
     /// ```
-    pub fn push_counter_set_to_current_time(&mut self, name: &str, labels: Vec<&str>) {
-        self.operations.push(PrometheusOperation {
+    pub fn set_to_current_time(&mut self) -> PrometheusOperation {
+        PrometheusOperation {
             metric: Metrics::Counter.into(),
             operation: Operations::SetToCurrentTime.into(),
-            name: name.to_owned(),
+            name: self.name.to_owned(),
             value: f64::NAN,
-            labels: vec_to_string(labels),
-        });
+            labels: self.labels.to_owned(),
+        }.clone()
     }
 }
 
-fn vec_to_string(v: Vec<&str>) -> Vec<String> {
-    v.iter().map(|s| s.to_string()).collect()
+#[cfg(test)]
+mod tests {
+    use crate::PrometheusOperations;
+    use super::*;
+
+    #[test]
+    fn test_counter() {
+
+        let mut prom_ops: PrometheusOperations = Default::default();
+
+        prom_ops.operations.push(Counter{
+            name: "custom_counter".to_owned(),
+            labels: vec!["custom_label".to_owned()]
+        }.inc());
+
+        assert_eq!(prom_ops.operations.len(), 1);
+    }
+
+    #[test]
+    fn test_counter_push() {
+        let mut prom_ops: PrometheusOperations = Default::default();
+        let mut counter = Counter{
+            name: "custom_counter".to_owned(),
+            labels: vec!["custom_label".to_owned()]
+        };
+        prom_ops.operations.push(counter.inc());
+        prom_ops.operations.push(counter.add(123.456));
+
+        assert_eq!(prom_ops.operations.len(), 2);
+    }
+
 }

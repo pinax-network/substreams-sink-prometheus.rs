@@ -32,7 +32,6 @@ impl Gauge {
     /// gauge.set_label("custom_label");
     /// ```
     #[inline]
-    #[must_use]
     pub fn set_label(&mut self, label: &str) {
         self.labels = vec![label.to_owned()];
     }
@@ -46,7 +45,6 @@ impl Gauge {
     /// gauge.set_labels(vec!["custom_label_1", "custom_label_2"]);
     /// ```
     #[inline]
-    #[must_use]
     pub fn set_labels(&mut self, labels: Vec<&str>) {
         self.labels = labels.iter().map(|s| s.to_string()).collect();
     }
@@ -68,7 +66,7 @@ impl Gauge {
             name: self.name.to_owned(),
             value,
             labels: self.labels.to_owned(),
-        }.clone()
+        }
     }
 
     /// Increments the Gauge by 1.
@@ -88,7 +86,7 @@ impl Gauge {
             name: self.name.to_owned(),
             value: 1.0,
             labels: self.labels.to_owned(),
-        }.clone()
+        }
     }
 
     /// Decrements the Gauge by 1.
@@ -108,7 +106,7 @@ impl Gauge {
             name: self.name.to_owned(),
             value: 1.0,
             labels: self.labels.to_owned(),
-        }.clone()
+        }
     }
 
     /// Adds an arbitrary value to a Gauge. (The value can be negative, resulting in a decrease of the Gauge.)
@@ -128,7 +126,7 @@ impl Gauge {
             name: self.name.to_owned(),
             value,
             labels: self.labels.to_owned(),
-        }.clone()
+        }
     }
 
     /// Subtracts arbitrary value from the Gauge. (The value can be negative, resulting in an increase of the Gauge.)
@@ -148,7 +146,7 @@ impl Gauge {
             name: self.name.to_owned(),
             value,
             labels: self.labels.to_owned(),
-        }.clone()
+        }
     }
 
     /// SetToCurrentTime sets the Gauge to the current Unix time in seconds.
@@ -168,7 +166,7 @@ impl Gauge {
             name: self.name.to_owned(),
             value: f64::NAN,
             labels: self.labels.to_owned(),
-        }.clone()
+        }
     }
 }
 

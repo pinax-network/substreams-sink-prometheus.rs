@@ -32,7 +32,6 @@ impl Counter {
     /// counter.set_label("custom_label");
     /// ```
     #[inline]
-    #[must_use]
     pub fn set_label(&mut self, label: &str) {
         self.labels = vec![label.to_owned()];
     }
@@ -46,7 +45,6 @@ impl Counter {
     /// counter.set_labels(vec!["custom_label_1", "custom_label_2"]);
     /// ```
     #[inline]
-    #[must_use]
     pub fn set_labels(&mut self, labels: Vec<&str>) {
         self.labels = labels.iter().map(|s| s.to_string()).collect();
     }
@@ -68,7 +66,7 @@ impl Counter {
             name: self.name.to_owned(),
             value: 1.0,
             labels: self.labels.to_owned(),
-        }.clone()
+        }
     }
 
     /// Adds an arbitrary value to a Counter. (Returns an error if the value is < 0.)
@@ -86,9 +84,9 @@ impl Counter {
             metric: Metrics::Counter.into(),
             operation: Operations::Add.into(),
             name: self.name.to_owned(),
-            value: value,
+            value,
             labels: self.labels.to_owned(),
-        }.clone()
+        }
     }
 
     /// SetToCurrentTime sets the Gauge to the current Unix time in seconds.
@@ -108,7 +106,7 @@ impl Counter {
             name: self.name.to_owned(),
             value: f64::NAN,
             labels: self.labels.to_owned(),
-        }.clone()
+        }
     }
 }
 

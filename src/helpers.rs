@@ -1,19 +1,18 @@
-use crate::{PrometheusOperations, PrometheusOperation};
+use crate::{PrometheusOperation, PrometheusOperations};
 
 impl PrometheusOperations {
-    pub fn push(&mut self, operation: PrometheusOperation) { 
+    pub fn push(&mut self, operation: PrometheusOperation) {
         self.operations.push(operation);
     }
 
-    pub fn extend(&mut self, operations: Vec<PrometheusOperation>) { 
+    pub fn extend(&mut self, operations: Vec<PrometheusOperation>) {
         self.operations.extend(operations);
     }
 }
 
-
 #[cfg(test)]
 mod tests {
-    use crate::{PrometheusOperations, Counter};
+    use crate::{Counter, PrometheusOperations};
 
     #[test]
     fn test_push() {
@@ -33,5 +32,4 @@ mod tests {
 
         assert_eq!(prom_ops.operations.len(), 2);
     }
-
 }

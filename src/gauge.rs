@@ -1,9 +1,9 @@
-use crate::{PrometheusOperation, Operations, Metrics};
+use crate::{Metrics, Operations, PrometheusOperation};
 
 #[derive(Eq, Clone, Debug, PartialEq, PartialOrd, Ord, Default)]
 pub struct Gauge {
     pub name: String,
-    pub labels: Vec<String>
+    pub labels: Vec<String>,
 }
 
 impl Gauge {
@@ -17,9 +17,9 @@ impl Gauge {
     #[inline]
     #[must_use]
     pub fn new(name: &str) -> Self {
-        Self{
+        Self {
             name: name.to_string(),
-            labels: vec![]
+            labels: vec![],
         }
     }
 
@@ -61,7 +61,7 @@ impl Gauge {
     #[must_use]
     pub fn set(&mut self, value: f64) -> PrometheusOperation {
         PrometheusOperation {
-            metric: Metrics::Gauge.into(), 
+            metric: Metrics::Gauge.into(),
             operation: Operations::Set.into(),
             name: self.name.to_owned(),
             value,
@@ -81,7 +81,7 @@ impl Gauge {
     #[must_use]
     pub fn inc(&mut self) -> PrometheusOperation {
         PrometheusOperation {
-            metric: Metrics::Gauge.into(), 
+            metric: Metrics::Gauge.into(),
             operation: Operations::Inc.into(),
             name: self.name.to_owned(),
             value: 1.0,
@@ -101,7 +101,7 @@ impl Gauge {
     #[must_use]
     pub fn dec(&mut self) -> PrometheusOperation {
         PrometheusOperation {
-            metric: Metrics::Gauge.into(), 
+            metric: Metrics::Gauge.into(),
             operation: Operations::Dec.into(),
             name: self.name.to_owned(),
             value: 1.0,
@@ -172,8 +172,8 @@ impl Gauge {
 
 #[cfg(test)]
 mod tests {
-    use crate::PrometheusOperations;
     use super::*;
+    use crate::PrometheusOperations;
 
     #[test]
     fn test_gauge() {

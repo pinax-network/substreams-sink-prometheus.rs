@@ -1,9 +1,9 @@
-use crate::{PrometheusOperation, Operations, Metrics};
+use crate::{Metrics, Operations, PrometheusOperation};
 
 #[derive(Eq, Clone, Debug, PartialEq, PartialOrd, Ord, Default)]
 pub struct Counter {
     pub name: String,
-    pub labels: Vec<String>
+    pub labels: Vec<String>,
 }
 
 impl Counter {
@@ -17,9 +17,9 @@ impl Counter {
     #[inline]
     #[must_use]
     pub fn new(name: &str) -> Self {
-        Self{
+        Self {
             name: name.to_string(),
-            labels: vec![]
+            labels: vec![],
         }
     }
 
@@ -61,7 +61,7 @@ impl Counter {
     #[must_use]
     pub fn inc(&mut self) -> PrometheusOperation {
         PrometheusOperation {
-            metric: Metrics::Counter.into(), 
+            metric: Metrics::Counter.into(),
             operation: Operations::Inc.into(),
             name: self.name.to_owned(),
             value: 1.0,
@@ -112,8 +112,8 @@ impl Counter {
 
 #[cfg(test)]
 mod tests {
-    use crate::PrometheusOperations;
     use super::*;
+    use crate::PrometheusOperations;
 
     #[test]
     fn test_counter() {

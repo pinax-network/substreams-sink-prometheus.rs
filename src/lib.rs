@@ -40,6 +40,7 @@
 //!
 //! ### Example
 //! ```
+//! use std::collections::HashMap;
 //! use substreams_sink_prometheus::{PrometheusOperations, Gauge, Counter};
 //! 
 //! // Initialize Prometheus Operations container
@@ -48,8 +49,7 @@
 //! // Counter Metric
 //! // ==============
 //! // Initialize Gauge with a name & labels
-//! let mut counter = Counter::new("counter_name");
-//! counter.set_label("custom_label");
+//! let mut counter = Counter::from("counter_name");
 //! 
 //! // Increments the Counter by 1.
 //! prom_ops.push(counter.inc());
@@ -57,11 +57,16 @@
 //! // Adds an arbitrary value to a Counter. (Returns an error if the value is < 0.)
 //! prom_ops.push(counter.add(123.456));
 //!
+//! // Labels
+//! // ======
+//! // Create a HashMap of labels
+//! let mut labels = HashMap::new();
+//! labels.insert("label1".to_string(), "value1".to_string());
+//!
 //! // Gauge Metric
 //! // ============
-//! // Initialize Gauge with a name & labels
-//! let mut gauge = Gauge::new("gauge_name");
-//! gauge.set_label("custom_label");
+//! // Initialize Gauge
+//! let mut gauge = Gauge::from("gauge_name").with(labels);
 //!
 //! // Sets the Gauge to an arbitrary value.
 //! prom_ops.push(gauge.set(88.8));
@@ -94,3 +99,5 @@ mod helpers;
 pub use self::counter::*;
 mod gauge;
 pub use self::gauge::*;
+mod labels;
+pub use self::labels::*;

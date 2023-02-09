@@ -17,7 +17,7 @@ mod tests {
     #[test]
     fn test_push() {
         let mut prom_ops: PrometheusOperations = Default::default();
-        let mut counter = Counter::new("custom_counter");
+        let mut counter = Counter::from("custom_counter");
         prom_ops.push(counter.inc());
         prom_ops.push(counter.inc());
 
@@ -27,7 +27,7 @@ mod tests {
     #[test]
     fn test_extend() {
         let mut prom_ops: PrometheusOperations = Default::default();
-        let mut counter = Counter::new("custom_counter");
+        let mut counter = Counter::from("custom_counter");
         prom_ops.extend(vec![counter.inc(), counter.inc()]);
 
         assert_eq!(prom_ops.operations.len(), 2);

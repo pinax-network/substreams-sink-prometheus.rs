@@ -67,6 +67,7 @@ substreams-sink-prometheus = "0.1"
 **src/lib.rs**
 
 ```rust
+use std::collections::HashMap;
 use substreams::prelude::*;
 use substreams::errors::Error;
 use substreams_sink_prometheus::{PrometheusOperations, Counter, Gauge};
@@ -82,8 +83,7 @@ fn prom_out(
     // Counter Metric
     // ==============
     // Initialize Gauge with a name & labels
-    let mut counter = Counter::new("counter_name");
-    counter.set_label("custom_label");
+    let mut counter = Counter::from("counter_name");
 
     // Increments the Counter by 1.
     prom_ops.push(counter.inc());
@@ -91,11 +91,16 @@ fn prom_out(
     // Adds an arbitrary value to a Counter. (Returns an error if the value is < 0.)
     prom_ops.push(counter.add(123.456));
 
+    // Labels
+    // ======
+    // Create a HashMap of labels
+    let mut labels = HashMap::new();
+    labels.insert("label1".to_string(), "value1".to_string());
+
     // Gauge Metric
     // ============
-    // Initialize Gauge with a name & labels
-    let mut gauge = Gauge::new("gauge_name");
-    gauge.set_label("custom_label");
+    // Initialize Gauge
+    let mut gauge = Gauge::from("gauge_name").with(labels);
 
     // Sets the Gauge to an arbitrary value.
     prom_ops.push(gauge.set(88.8));
@@ -106,11 +111,11 @@ fn prom_out(
     // Decrements the Gauge by 1.
     prom_ops.push(gauge.dec());
 
-    // Adds an arbitrary value to a Gauge. (The value can be negative, resulting in a decrease of the Gauge.)
+    // Adds an arbitrary value to a Gauge. (The value can be negative, resulting in a   rease of the Gauge.)
     prom_ops.push(gauge.add(50.0));
     prom_ops.push(gauge.add(-10.0));
 
-    // Subtracts arbitrary value from the Gauge. (The value can be negative, resulting in an increase of the Gauge.)
+    // Subtracts arbitrary value from the Gauge. (The value can be negative, resulting in an    rease of the Gauge.)
     prom_ops.push(gauge.sub(25.0));
     prom_ops.push(gauge.sub(-5.0));
 

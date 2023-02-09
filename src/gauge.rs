@@ -1,9 +1,11 @@
+use std::collections::HashMap;
+
 use crate::{Metrics, Operations, PrometheusOperation};
 
-#[derive(Eq, Clone, Debug, PartialEq, PartialOrd, Ord, Default)]
+#[derive(Eq, Debug, PartialEq, Default)]
 pub struct Gauge {
     pub name: String,
-    pub labels: Vec<String>,
+    pub labels: HashMap<String, String>,
 }
 
 impl Gauge {
@@ -12,14 +14,14 @@ impl Gauge {
     /// ### Example
     /// ```
     /// use substreams_sink_prometheus::Gauge;
-    /// let mut gauge = Gauge::new("gauge_name");
+    /// let mut gauge = Gauge::from("gauge_name");
     /// ```
     #[inline]
     #[must_use]
-    pub fn new(name: &str) -> Self {
+    pub fn from(name: &str) -> Self {
         Self {
             name: name.to_string(),
-            labels: vec![],
+            labels: Default::default(),
         }
     }
 
@@ -27,26 +29,17 @@ impl Gauge {
     ///
     /// ### Example
     /// ```
+    /// use std::collections::HashMap;
     /// use substreams_sink_prometheus::Gauge;
-    /// let mut gauge = Gauge::new("gauge_name");
-    /// gauge.set_label("custom_label");
+    /// let mut gauge = Gauge::from("gauge_name");
+    /// let mut labels = HashMap::new();
+    /// labels.insert("label1".to_string(), "value1".to_string());
+    /// gauge.with(labels);
     /// ```
     #[inline]
-    pub fn set_label(&mut self, label: &str) {
-        self.labels = vec![label.to_owned()];
-    }
-
-    /// Set labels to Gauge
-    ///
-    /// ### Example
-    /// ```
-    /// use substreams_sink_prometheus::Gauge;
-    /// let mut gauge = Gauge::new("gauge_name");
-    /// gauge.set_labels(vec!["custom_label_1", "custom_label_2"]);
-    /// ```
-    #[inline]
-    pub fn set_labels(&mut self, labels: Vec<&str>) {
-        self.labels = labels.iter().map(|s| s.to_string()).collect();
+    pub fn with(mut self, labels: HashMap<String, String>) -> Self {
+        self.labels = labels;
+        self
     }
 
     /// Sets the Gauge to an arbitrary value.
@@ -55,7 +48,7 @@ impl Gauge {
     /// ```
     /// use substreams_sink_prometheus::{PrometheusOperations, Gauge};
     /// let mut prom_ops: PrometheusOperations = Default::default();
-    /// prom_ops.push(Gauge::new("gauge_name").set(88.8));
+    /// prom_ops.push(Gauge::from("gauge_name").set(88.8));
     /// ```
     #[inline]
     #[must_use]
@@ -75,7 +68,7 @@ impl Gauge {
     /// ```
     /// use substreams_sink_prometheus::{PrometheusOperations, Gauge};
     /// let mut prom_ops: PrometheusOperations = Default::default();
-    /// prom_ops.push(Gauge::new("gauge_name").inc());
+    /// prom_ops.push(Gauge::from("gauge_name").inc());
     /// ```
     #[inline]
     #[must_use]
@@ -95,7 +88,7 @@ impl Gauge {
     /// ```
     /// use substreams_sink_prometheus::{PrometheusOperations, Gauge};
     /// let mut prom_ops: PrometheusOperations = Default::default();
-    /// prom_ops.push(Gauge::new("gauge_name").dec());
+    /// prom_ops.push(Gauge::from("gauge_name").dec());
     /// ```
     #[inline]
     #[must_use]
@@ -115,7 +108,7 @@ impl Gauge {
     /// ```
     /// use substreams_sink_prometheus::{PrometheusOperations, Gauge};
     /// let mut prom_ops: PrometheusOperations = Default::default();
-    /// prom_ops.push(Gauge::new("gauge_name").add(123.456));
+    /// prom_ops.push(Gauge::from("gauge_name").add(123.456));
     /// ```
     #[inline]
     #[must_use]
@@ -135,7 +128,7 @@ impl Gauge {
     /// ```
     /// use substreams_sink_prometheus::{PrometheusOperations, Gauge};
     /// let mut prom_ops: PrometheusOperations = Default::default();
-    /// prom_ops.push(Gauge::new("gauge_name").sub(123.456));
+    /// prom_ops.push(Gauge::from("gauge_name").sub(123.456));
     /// ```
     #[inline]
     #[must_use]
@@ -155,7 +148,7 @@ impl Gauge {
     /// ```
     /// use substreams_sink_prometheus::{PrometheusOperations, Gauge};
     /// let mut prom_ops: PrometheusOperations = Default::default();
-    /// prom_ops.push(Gauge::new("gauge_name").set_to_current_time());
+    /// prom_ops.push(Gauge::from("gauge_name").set_to_current_time());
     /// ```
     #[inline]
     #[must_use]
@@ -178,11 +171,11 @@ mod tests {
     #[test]
     fn test_gauge() {
         let mut prom_ops: PrometheusOperations = Default::default();
-        prom_ops.push(Gauge::new("a").set(88.8));
-        prom_ops.push(Gauge::new("b").inc());
-        prom_ops.push(Gauge::new("c").dec());
-        prom_ops.push(Gauge::new("d").add(123.456));
-        prom_ops.push(Gauge::new("e").sub(123.456));
+        prom_ops.push(Gauge::from("a").set(88.8));
+        prom_ops.push(Gauge::from("b").inc());
+        prom_ops.push(Gauge::from("c").dec());
+        prom_ops.push(Gauge::from("d").add(123.456));
+        prom_ops.push(Gauge::from("e").sub(123.456));
 
         assert_eq!(prom_ops.operations.len(), 5);
     }

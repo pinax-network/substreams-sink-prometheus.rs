@@ -1,9 +1,11 @@
+use std::collections::HashMap;
+
 use crate::{Metrics, Operations, PrometheusOperation};
 
-#[derive(Eq, Clone, Debug, PartialEq, PartialOrd, Ord, Default)]
+#[derive(Eq, Debug, PartialEq, Default)]
 pub struct Counter {
     pub name: String,
-    pub labels: Vec<String>,
+    pub labels: HashMap<String, String>,
 }
 
 impl Counter {
@@ -12,14 +14,14 @@ impl Counter {
     /// ### Example
     /// ```
     /// use substreams_sink_prometheus::Counter;
-    /// let mut counter = Counter::new("counter_name");
+    /// let mut counter = Counter::from("counter_name");
     /// ```
     #[inline]
     #[must_use]
-    pub fn new(name: &str) -> Self {
+    pub fn from(name: &str) -> Self {
         Self {
             name: name.to_string(),
-            labels: vec![],
+            labels: Default::default(),
         }
     }
 
@@ -27,26 +29,17 @@ impl Counter {
     ///
     /// ### Example
     /// ```
+    /// use std::collections::HashMap;
     /// use substreams_sink_prometheus::Counter;
-    /// let mut counter = Counter::new("counter_name");
-    /// counter.set_label("custom_label");
+    /// let mut counter = Counter::from("counter_name");
+    /// let mut labels = HashMap::new();
+    /// labels.insert("label1".to_string(), "value1".to_string());
+    /// counter.with(labels);
     /// ```
     #[inline]
-    pub fn set_label(&mut self, label: &str) {
-        self.labels = vec![label.to_owned()];
-    }
-
-    /// Set labels to Counter
-    ///
-    /// ### Example
-    /// ```
-    /// use substreams_sink_prometheus::Counter;
-    /// let mut counter = Counter::new("counter_name");
-    /// counter.set_labels(vec!["custom_label_1", "custom_label_2"]);
-    /// ```
-    #[inline]
-    pub fn set_labels(&mut self, labels: Vec<&str>) {
-        self.labels = labels.iter().map(|s| s.to_string()).collect();
+    pub fn with(mut self, labels: HashMap<String, String>) -> Self {
+        self.labels = labels;
+        self
     }
 
     /// Increments the Counter by 1.
@@ -55,7 +48,7 @@ impl Counter {
     /// ```
     /// use substreams_sink_prometheus::{PrometheusOperations, Counter};
     /// let mut prom_ops: PrometheusOperations = Default::default();
-    /// prom_ops.push(Counter::new("counter_name").inc());
+    /// prom_ops.push(Counter::from("counter_name").inc());
     /// ```
     #[inline]
     #[must_use]
@@ -75,7 +68,7 @@ impl Counter {
     /// ```
     /// use substreams_sink_prometheus::{PrometheusOperations, Counter};
     /// let mut prom_ops: PrometheusOperations = Default::default();
-    /// prom_ops.push(Counter::new("counter_name").add(123.456));
+    /// prom_ops.push(Counter::from("counter_name").add(123.456));
     /// ```
     #[inline]
     #[must_use]
@@ -98,8 +91,8 @@ mod tests {
     #[test]
     fn test_counter() {
         let mut prom_ops: PrometheusOperations = Default::default();
-        prom_ops.push(Counter::new("a").inc());
-        prom_ops.push(Counter::new("b").add(123.456));
+        prom_ops.push(Counter::from("a").inc());
+        prom_ops.push(Counter::from("b").add(123.456));
         assert_eq!(prom_ops.operations.len(), 2);
     }
 }

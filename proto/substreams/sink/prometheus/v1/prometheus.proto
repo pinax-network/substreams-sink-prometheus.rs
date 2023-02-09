@@ -11,10 +11,10 @@ message PrometheusOperations {
 
 message PrometheusOperation {
   Metrics metric = 1;             // Prometheus metric type (COUNTER, GAUGE, HISTOGRAM, SUMMARY)
-  Operations operation = 2;       // Prometheus metric operation
+  Operations operation = 2;       // Prometheus metric operation (SET, INC, DEC, ADD, SUB, SET_TO_CURRENT_TIME, RESET)
   string name = 3;                // Name of the Prometheus metric
   double value = 4;               // Value (Float) to be used in the operation
-  repeated string labels = 5;     // Labels to be used in Metric
+  map<string, string> labels = 5; // Labels to be used in Metric
 }
 
 enum Metrics {

@@ -86,6 +86,7 @@
 pub mod pb;
 pub use self::pb::*;
 
+mod helpers;
 mod counter;
 pub use self::counter::*;
 mod gauge;

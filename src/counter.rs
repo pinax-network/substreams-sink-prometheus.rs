@@ -1,12 +1,28 @@
 use crate::{PrometheusOperation, Operations, Metrics};
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Eq, Clone, Debug, PartialEq, PartialOrd, Ord, Default)]
 pub struct Counter {
     pub name: String,
     pub labels: Vec<String>
 }
 
 impl Counter {
+    #[must_use]
+    pub fn new(name: &str) -> Self {
+        Self{
+            name: name.to_string(),
+            labels: vec![]
+        }
+    }
+
+    pub fn set_label(&mut self, label: &str) {
+        self.labels = vec![label.to_owned()];
+    }
+
+    pub fn set_labels(&mut self, labels: Vec<&str>) {
+        self.labels = labels.iter().map(|s| s.to_string()).collect();
+    }
+
     /// Increments the Counter by 1.
     ///
     /// ### Example
@@ -104,6 +120,17 @@ mod tests {
         };
         prom_ops.operations.push(counter.inc());
         prom_ops.operations.push(counter.add(123.456));
+
+        assert_eq!(prom_ops.operations.len(), 2);
+    }
+
+    #[test]
+    fn test_counter_new() {
+        let mut prom_ops: PrometheusOperations = Default::default();
+        let mut counter = Counter::new("custom_counter");
+        counter.set_label("custom_label");
+        prom_ops.push(counter.inc());
+        prom_ops.push(counter.add(123.456));
 
         assert_eq!(prom_ops.operations.len(), 2);
     }

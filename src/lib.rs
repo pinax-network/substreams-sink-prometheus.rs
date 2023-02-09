@@ -45,8 +45,11 @@
 //!
 //! // Counter Metric
 //! // ==============
-//! // Increments the Counter by 1.
+//! // Initialize Gauge with a name & labels
 //! let mut counter = Counter::new("counter_name");
+//! counter.set_label("custom_label");
+//! 
+//! // Increments the Counter by 1.
 //! prom_ops.push(counter.inc());
 //!
 //! // Adds an arbitrary value to a Counter. (Returns an error if the value is < 0.)

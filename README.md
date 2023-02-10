@@ -16,6 +16,12 @@
 - [Substreams documentation](https://substreams.streamingfast.io)
 - [Prometheus documentation](https://prometheus.io)
 
+## Quickstart ⚡️
+
+1. Install `npm install -g substreams-sink-prometheus`
+2. Run Sink `substreams-sink-prometheus run [<manifest>] [<module_name>] [flags]`
+3. Open the browser at [http://localhost:9102/metrics](http://localhost:9102/metrics)
+
 ## 🛠 Feature Roadmap
 
 ### [Gauge Metric](https://pkg.go.dev/github.com/prometheus/client_golang/prometheus#Gauge)

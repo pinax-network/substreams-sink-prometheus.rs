@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use crate::{Metrics, Operations, PrometheusOperation};
+use crate::{Metrics, PrometheusOperation, prometheus_operation, GaugeOp, gauge_op};
 
 #[derive(Eq, Debug, PartialEq, Default)]
 pub struct Gauge {
@@ -53,12 +53,15 @@ impl Gauge {
     #[inline]
     #[must_use]
     pub fn set(&mut self, value: f64) -> PrometheusOperation {
-        PrometheusOperation {
-            metric: Metrics::Gauge.into(),
-            operation: Operations::Set.into(),
-            name: self.name.to_owned(),
+        let op = GaugeOp {
             value,
+            operation: gauge_op::Operation::Set.into(),
+        };
+        PrometheusOperation {
+            name: self.name.to_owned(),
+            metric: Metrics::Gauge.into(),
             labels: self.labels.to_owned(),
+            operation: Some(prometheus_operation::Operation::Gauge(op)),
         }
     }
 
@@ -73,12 +76,15 @@ impl Gauge {
     #[inline]
     #[must_use]
     pub fn inc(&mut self) -> PrometheusOperation {
-        PrometheusOperation {
-            metric: Metrics::Gauge.into(),
-            operation: Operations::Inc.into(),
-            name: self.name.to_owned(),
+        let op = GaugeOp {
             value: 1.0,
+            operation: gauge_op::Operation::Inc.into(),
+        };
+        PrometheusOperation {
+            name: self.name.to_owned(),
+            metric: Metrics::Gauge.into(),
             labels: self.labels.to_owned(),
+            operation: Some(prometheus_operation::Operation::Gauge(op)),
         }
     }
 
@@ -93,12 +99,15 @@ impl Gauge {
     #[inline]
     #[must_use]
     pub fn dec(&mut self) -> PrometheusOperation {
-        PrometheusOperation {
-            metric: Metrics::Gauge.into(),
-            operation: Operations::Dec.into(),
-            name: self.name.to_owned(),
+        let op = GaugeOp {
             value: 1.0,
+            operation: gauge_op::Operation::Dec.into(),
+        };
+        PrometheusOperation {
+            name: self.name.to_owned(),
+            metric: Metrics::Gauge.into(),
             labels: self.labels.to_owned(),
+            operation: Some(prometheus_operation::Operation::Gauge(op)),
         }
     }
 
@@ -113,12 +122,15 @@ impl Gauge {
     #[inline]
     #[must_use]
     pub fn add(&mut self, value: f64) -> PrometheusOperation {
-        PrometheusOperation {
-            metric: Metrics::Gauge.into(),
-            operation: Operations::Add.into(),
-            name: self.name.to_owned(),
+        let op = GaugeOp {
             value,
+            operation: gauge_op::Operation::Add.into(),
+        };
+        PrometheusOperation {
+            name: self.name.to_owned(),
+            metric: Metrics::Gauge.into(),
             labels: self.labels.to_owned(),
+            operation: Some(prometheus_operation::Operation::Gauge(op)),
         }
     }
 
@@ -133,12 +145,15 @@ impl Gauge {
     #[inline]
     #[must_use]
     pub fn sub(&mut self, value: f64) -> PrometheusOperation {
-        PrometheusOperation {
-            metric: Metrics::Gauge.into(),
-            operation: Operations::Sub.into(),
-            name: self.name.to_owned(),
+        let op = GaugeOp {
             value,
+            operation: gauge_op::Operation::Sub.into(),
+        };
+        PrometheusOperation {
+            name: self.name.to_owned(),
+            metric: Metrics::Gauge.into(),
             labels: self.labels.to_owned(),
+            operation: Some(prometheus_operation::Operation::Gauge(op)),
         }
     }
 
@@ -153,12 +168,15 @@ impl Gauge {
     #[inline]
     #[must_use]
     pub fn set_to_current_time(&mut self) -> PrometheusOperation {
-        PrometheusOperation {
-            metric: Metrics::Gauge.into(),
-            operation: Operations::SetToCurrentTime.into(),
-            name: self.name.to_owned(),
+        let op = GaugeOp {
             value: f64::NAN,
+            operation: gauge_op::Operation::SetToCurrentTime.into(),
+        };
+        PrometheusOperation {
+            name: self.name.to_owned(),
+            metric: Metrics::Gauge.into(),
             labels: self.labels.to_owned(),
+            operation: Some(prometheus_operation::Operation::Gauge(op)),
         }
     }
 }

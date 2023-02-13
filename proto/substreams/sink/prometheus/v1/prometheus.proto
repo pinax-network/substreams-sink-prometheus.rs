@@ -10,11 +10,13 @@ message PrometheusOperations {
 }
 
 message PrometheusOperation {
-  Metrics metric = 1;             // Prometheus metric type (COUNTER, GAUGE, HISTOGRAM, SUMMARY)
-  Operations operation = 2;       // Prometheus metric operation (SET, INC, DEC, ADD, SUB, SET_TO_CURRENT_TIME, RESET)
-  string name = 3;                // Name of the Prometheus metric
-  double value = 4;               // Value (Float) to be used in the operation
-  map<string, string> labels = 5; // Labels to be used in Metric
+  string name = 1;                // Name of the Prometheus metric
+  Metrics metric = 2;             // Prometheus metric type (COUNTER, GAUGE, HISTOGRAM, SUMMARY)
+  map<string, string> labels = 3; // Labels to be used in Metric
+  oneof operation {
+    GaugeOp gauge = 4;
+    CounterOp counter = 5;
+  }
 }
 
 enum Metrics {
@@ -30,21 +32,38 @@ enum Metrics {
   METRICS_SUMMARY = 4;
 }
 
-enum Operations {
-  // Protobuf default should not be used, this is used so that the consume can ensure that the value was actually specified
-  OPERATIONS_UNSPECIFIED = 0;
-  // Set sets the Gauge to an arbitrary value. 
-  OPERATIONS_SET = 1; // float
-  // Inc increments the Gauge by 1. Use Add to increment it by arbitrary values.
-  OPERATIONS_INC = 2;
-  // Dec decrements the Gauge by 1. Use Sub to decrement it by arbitrary values.
-  OPERATIONS_DEC = 3;
-  // Add adds the given value to the Gauge. (The value can be negative, resulting in a decrease of the Gauge.)
-  OPERATIONS_ADD = 4; // float
-  // Sub subtracts the given value from the Gauge. (The value can be negative, resulting in an increase of the Gauge.)
-  OPERATIONS_SUB = 5; // float
-  // SetToCurrentTime sets the Gauge to the current Unix time in seconds.
-  OPERATIONS_SET_TO_CURRENT_TIME = 7;
-  // Reset metric
-  OPERATIONS_RESET = 8;
+message GaugeOp {
+  enum Operation {
+    // Protobuf default should not be used, this is used so that the consume can ensure that the value was actually specified
+    OPERATION_UNSPECIFIED = 0;
+    // Inc increments the Gauge by 1. Use Add to increment it by arbitrary values.
+    OPERATION_INC = 1;
+    // Add adds the given value to the Gauge. (The value can be negative, resulting in a decrease of the Gauge.)
+    OPERATION_ADD = 2; // float
+    // Set sets the Gauge to an arbitrary value. 
+    OPERATION_SET = 3; // float
+    // Dec decrements the Gauge by 1. Use Sub to decrement it by arbitrary values.
+    OPERATION_DEC = 4;
+    // Sub subtracts the given value from the Gauge. (The value can be negative, resulting in an increase of the Gauge.)
+    OPERATION_SUB = 5; // float
+    // SetToCurrentTime sets the Gauge to the current Unix time in seconds.
+    OPERATION_SET_TO_CURRENT_TIME = 6;
+    // Reset metric
+    OPERATION_RESET = 7;
+  }
+  Operation operation = 1;
+  double value = 2;               // Value (Float) to be used in the operation
+}
+
+message CounterOp {
+  enum Operation {
+    // Protobuf default should not be used, this is used so that the consume can ensure that the value was actually specified
+    OPERATION_UNSPECIFIED = 0;
+    // Increments the Counter by 1.
+    OPERATION_INC = 1;
+    // Adds an arbitrary value to a Counter. (Returns an error if the value is < 0.)
+    OPERATION_ADD = 2; // float
+  }
+  Operation operation = 1;
+  double value = 2;               // Value (Float) to be used in the operation
 }

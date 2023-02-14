@@ -9,7 +9,7 @@ export function run(args: {
     substreamsEndpoint?: string,
 } = {}) {
     // User params
-    const spkg = "https://github.com/pinax-network/substreams/releases/download/eosmechanics-v0.3.2/eosmechanics-v0.3.2.spkg";
+    const spkg = "https://github.com/pinax-network/substreams/releases/download/eosmechanics-v0.3.3/eosmechanics-v0.3.3.spkg";
     const messageTypeName = "pinax.substreams.sink.prometheus.v1.PrometheusOperations";
     const outputModule = args.outputModule ?? "prom_out";
     const startBlockNum = args.startBlockNum ?? "292442484";
@@ -38,7 +38,10 @@ export function run(args: {
     
             // Prometheus metrics
             for ( const decodedOperation of decoded.operations ) {
-                const { metric, operation, name, value, labels } = decodedOperation.toJson();
+                console.log(decodedOperation);
+
+                const { name, labels, operation, value } = decodedOperation.toJson();
+
                 if ( !name ) continue;
 
                 // Only include COUNTER for now

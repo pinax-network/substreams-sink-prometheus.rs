@@ -4,32 +4,18 @@ package pinax.substreams.sink.prometheus.v1;
 
 option go_package = "github.com/pinax-network/substreams-sink-prometheus/pb;pbkv";
 
-// List of Prometheus metrics
+// Vector of Prometheus metrics
 message PrometheusOperations {
   repeated PrometheusOperation operations = 1;
 }
 
 message PrometheusOperation {
   string name = 1;                // Name of the Prometheus metric
-  Metrics metric = 2;             // Prometheus metric type (COUNTER, GAUGE, HISTOGRAM, SUMMARY)
-  map<string, string> labels = 3; // Labels to be used in Metric
+  map<string, string> labels = 2; // Labels to be used in Metric
   oneof operation {
-    GaugeOp gauge = 4;
-    CounterOp counter = 5;
+    GaugeOp gauge = 3;
+    CounterOp counter = 4;
   }
-}
-
-enum Metrics {
-  // Protobuf default should not be used, this is used so that the consume can ensure that the value was actually specified
-  METRICS_UNSPECIFIED = 0;
-  // Prometheus metric of type 'Counter'
-  METRICS_COUNTER = 1;
-  // Prometheus metric of type 'Gauge'
-  METRICS_GAUGE = 2;
-  // Prometheus metric of type 'Histogram'
-  METRICS_HISTOGRAM = 3;
-  // Prometheus metric of type 'Summary'
-  METRICS_SUMMARY = 4;
 }
 
 message GaugeOp {

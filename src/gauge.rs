@@ -26,14 +26,14 @@ impl Gauge {
     }
 
     /// Set label to Gauge
+    /// Labels represents a collection of label name -> value mappings. 
     ///
     /// ### Example
     /// ```
     /// use std::collections::HashMap;
     /// use substreams_sink_prometheus::Gauge;
     /// let mut gauge = Gauge::from("gauge_name");
-    /// let mut labels = HashMap::new();
-    /// labels.insert("label1".to_string(), "value1".to_string());
+    /// let labels = HashMap::from([("label1".to_string(), "value1".to_string())]);
     /// gauge.with(labels);
     /// ```
     #[inline]
@@ -173,22 +173,75 @@ impl Gauge {
             operation: Some(prometheus_operation::Operation::Gauge(op)),
         }
     }
+
+    /// Remove metrics for the given label values
+    ///
+    /// ### Example
+    /// ```
+    /// use std::collections::HashMap;
+    /// use substreams_sink_prometheus::{PrometheusOperations, Gauge};
+    /// let mut prom_ops: PrometheusOperations = Default::default();
+    /// let labels = HashMap::from([("label1".to_string(), "value1".to_string())]);
+    /// prom_ops.push(Gauge::from("gauge_name").remove(labels));
+    /// ```
+    #[inline]
+    #[must_use]
+    pub fn remove(&mut self, labels: HashMap<String, String>) -> PrometheusOperation {
+        let op = GaugeOp {
+            value: f64::NAN,
+            operation: gauge_op::Operation::Remove.into(),
+        };
+        PrometheusOperation {
+            name: self.name.to_owned(),
+            labels,
+            operation: Some(prometheus_operation::Operation::Gauge(op)),
+        }
+    }
+
+    /// Reset gauge values
+    ///
+    /// ### Example
+    /// ```
+    /// use substreams_sink_prometheus::{PrometheusOperations, Gauge};
+    /// let mut prom_ops: PrometheusOperations = Default::default();
+    /// prom_ops.push(Gauge::from("gauge_name").reset());
+    /// ```
+    #[inline]
+    #[must_use]
+    pub fn reset(&mut self) -> PrometheusOperation {
+        let op = GaugeOp {
+            value: f64::NAN,
+            operation: gauge_op::Operation::Reset.into(),
+        };
+        PrometheusOperation {
+            name: self.name.to_owned(),
+            labels: Default::default(),
+            operation: Some(prometheus_operation::Operation::Gauge(op)),
+        }
+    }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
     use crate::PrometheusOperations;
+    use std::collections::HashMap;
 
     #[test]
     fn test_gauge() {
         let mut prom_ops: PrometheusOperations = Default::default();
-        prom_ops.push(Gauge::from("a").set(88.8));
-        prom_ops.push(Gauge::from("b").inc());
-        prom_ops.push(Gauge::from("c").dec());
-        prom_ops.push(Gauge::from("d").add(123.456));
-        prom_ops.push(Gauge::from("e").sub(123.456));
+        let labels = HashMap::from([("label1".to_string(), "value1".to_string())]);
+        let mut gauge = Gauge::from("gauge_name").with(labels.clone());
 
-        assert_eq!(prom_ops.operations.len(), 5);
+        prom_ops.push(gauge.set(88.8));
+        prom_ops.push(gauge.inc());
+        prom_ops.push(gauge.dec());
+        prom_ops.push(gauge.add(123.456));
+        prom_ops.push(gauge.sub(123.456));
+        prom_ops.push(gauge.set_to_current_time());
+        prom_ops.push(gauge.reset());
+        prom_ops.push(gauge.remove(labels));
+
+        assert_eq!(prom_ops.operations.len(), 8);
     }
 }

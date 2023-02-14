@@ -26,14 +26,14 @@ impl Counter {
     }
 
     /// Set label to Counter
+    /// Labels represents a collection of label name -> value mappings. 
     ///
     /// ### Example
     /// ```
     /// use std::collections::HashMap;
     /// use substreams_sink_prometheus::Counter;
     /// let mut counter = Counter::from("counter_name");
-    /// let mut labels = HashMap::new();
-    /// labels.insert("label1".to_string(), "value1".to_string());
+    /// let labels = HashMap::from([("label1".to_string(), "value1".to_string())]);
     /// counter.with(labels);
     /// ```
     #[inline]
@@ -85,18 +85,70 @@ impl Counter {
             operation: Some(prometheus_operation::Operation::Counter(op)),
         }
     }
+
+    /// Remove metrics for the given label values
+    ///
+    /// ### Example
+    /// ```
+    /// use std::collections::HashMap;
+    /// use substreams_sink_prometheus::{PrometheusOperations, Counter};
+    /// let mut prom_ops: PrometheusOperations = Default::default();
+    /// let labels = HashMap::from([("label1".to_string(), "value1".to_string())]);
+    /// prom_ops.push(Counter::from("counter_name").remove(labels));
+    /// ```
+    #[inline]
+    #[must_use]
+    pub fn remove(&mut self, labels: HashMap<String, String>) -> PrometheusOperation {
+        let op = CounterOp {
+            value: f64::NAN,
+            operation: counter_op::Operation::Remove.into(),
+        };
+        PrometheusOperation {
+            name: self.name.to_owned(),
+            labels,
+            operation: Some(prometheus_operation::Operation::Counter(op)),
+        }
+    }
+
+    /// Reset counter values
+    ///
+    /// ### Example
+    /// ```
+    /// use substreams_sink_prometheus::{PrometheusOperations, Counter};
+    /// let mut prom_ops: PrometheusOperations = Default::default();
+    /// prom_ops.push(Counter::from("counter_name").reset());
+    /// ```
+    #[inline]
+    #[must_use]
+    pub fn reset(&mut self) -> PrometheusOperation {
+        let op = CounterOp {
+            value: f64::NAN,
+            operation: counter_op::Operation::Reset.into(),
+        };
+        PrometheusOperation {
+            name: self.name.to_owned(),
+            labels: Default::default(),
+            operation: Some(prometheus_operation::Operation::Counter(op)),
+        }
+    }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
     use crate::PrometheusOperations;
+    use std::collections::HashMap;
 
     #[test]
     fn test_counter() {
         let mut prom_ops: PrometheusOperations = Default::default();
-        prom_ops.push(Counter::from("a").inc());
-        prom_ops.push(Counter::from("b").add(123.456));
-        assert_eq!(prom_ops.operations.len(), 2);
+        let labels = HashMap::from([("label1".to_string(), "value1".to_string())]);
+        let mut counter = Counter::from("a").with(labels.clone());
+
+        prom_ops.push(counter.inc());
+        prom_ops.push(counter.add(123.456));
+        prom_ops.push(counter.reset());
+        prom_ops.push(counter.remove(labels));
+        assert_eq!(prom_ops.operations.len(), 4);
     }
 }

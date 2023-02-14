@@ -60,13 +60,15 @@
 //! // Labels
 //! // ======
 //! // Create a HashMap of labels
-//! let mut labels = HashMap::new();
-//! labels.insert("label1".to_string(), "value1".to_string());
-//!
+//! // Labels represents a collection of label name -> value mappings. 
+//! let labels1 = HashMap::from([("label1".to_string(), "value1".to_string())]);
+//! let mut labels2 = HashMap::new();
+//! labels2.insert("label2".to_string(), "value2".to_string());
+//! 
 //! // Gauge Metric
 //! // ============
 //! // Initialize Gauge
-//! let mut gauge = Gauge::from("gauge_name").with(labels);
+//! let mut gauge = Gauge::from("gauge_name").with(labels1);
 //!
 //! // Sets the Gauge to an arbitrary value.
 //! prom_ops.push(gauge.set(88.8));
@@ -87,8 +89,13 @@
 //!
 //! // Set Gauge to the current Unix time in seconds.
 //! prom_ops.push(gauge.set_to_current_time());
+//! 
+//! // Remove metrics for the given label values
+//! prom_ops.push(gauge.remove(labels2));
+//! 
+//! // Reset gauge values
+//! prom_ops.push(gauge.reset());
 //! ```
-
 #[path = "pb/pinax.substreams.sink.prometheus.v1.rs"]
 #[allow(dead_code)]
 pub mod pb;

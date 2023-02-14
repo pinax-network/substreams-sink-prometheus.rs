@@ -1,7 +1,7 @@
 specVersion: v0.1.0
 package:
   name: substreams_sink_prometheus
-  version: v0.1.7
+  version: v0.1.8
   url: https://github.com/pinax-network/substreams-sink-prometheus
   doc: Substreams Sink to Prometheus
 

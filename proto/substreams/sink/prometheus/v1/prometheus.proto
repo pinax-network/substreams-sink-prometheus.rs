@@ -11,7 +11,7 @@ message PrometheusOperations {
 
 message PrometheusOperation {
   string name = 1;                // Name of the Prometheus metric
-  map<string, string> labels = 2; // Labels to be used in Metric
+  map<string, string> labels = 2; // Labels represents a collection of label name -> value mappings. 
   oneof operation {
     GaugeOp gauge = 3;
     CounterOp counter = 4;
@@ -34,8 +34,10 @@ message GaugeOp {
     OPERATION_SUB = 5; // float
     // SetToCurrentTime sets the Gauge to the current Unix time in seconds.
     OPERATION_SET_TO_CURRENT_TIME = 6;
-    // Reset metric
-    OPERATION_RESET = 7;
+    // Remove metrics for the given label values
+    OPERATION_REMOVE = 7;
+    // Reset gauge values
+    OPERATION_RESET = 8;
   }
   Operation operation = 1;
   double value = 2;               // Value (Float) to be used in the operation
@@ -49,6 +51,10 @@ message CounterOp {
     OPERATION_INC = 1;
     // Adds an arbitrary value to a Counter. (Returns an error if the value is < 0.)
     OPERATION_ADD = 2; // float
+    // Remove metrics for the given label values
+    OPERATION_REMOVE = 7;
+    // Reset counter values
+    OPERATION_RESET = 8;
   }
   Operation operation = 1;
   double value = 2;               // Value (Float) to be used in the operation

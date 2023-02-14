@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use crate::{Metrics, PrometheusOperation, prometheus_operation, CounterOp, counter_op};
+use crate::{PrometheusOperation, prometheus_operation, CounterOp, counter_op};
 
 #[derive(Eq, Debug, PartialEq, Default)]
 pub struct Counter {
@@ -59,7 +59,6 @@ impl Counter {
         };
         PrometheusOperation {
             name: self.name.to_owned(),
-            metric: Metrics::Counter.into(),
             labels: self.labels.to_owned(),
             operation: Some(prometheus_operation::Operation::Counter(op)),
         }
@@ -82,7 +81,6 @@ impl Counter {
         };
         PrometheusOperation {
             name: self.name.to_owned(),
-            metric: Metrics::Counter.into(),
             labels: self.labels.to_owned(),
             operation: Some(prometheus_operation::Operation::Counter(op)),
         }

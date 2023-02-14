@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use crate::{Metrics, PrometheusOperation, prometheus_operation, GaugeOp, gauge_op};
+use crate::{PrometheusOperation, prometheus_operation, GaugeOp, gauge_op};
 
 #[derive(Eq, Debug, PartialEq, Default)]
 pub struct Gauge {
@@ -59,7 +59,6 @@ impl Gauge {
         };
         PrometheusOperation {
             name: self.name.to_owned(),
-            metric: Metrics::Gauge.into(),
             labels: self.labels.to_owned(),
             operation: Some(prometheus_operation::Operation::Gauge(op)),
         }
@@ -82,7 +81,6 @@ impl Gauge {
         };
         PrometheusOperation {
             name: self.name.to_owned(),
-            metric: Metrics::Gauge.into(),
             labels: self.labels.to_owned(),
             operation: Some(prometheus_operation::Operation::Gauge(op)),
         }
@@ -105,7 +103,6 @@ impl Gauge {
         };
         PrometheusOperation {
             name: self.name.to_owned(),
-            metric: Metrics::Gauge.into(),
             labels: self.labels.to_owned(),
             operation: Some(prometheus_operation::Operation::Gauge(op)),
         }
@@ -128,7 +125,6 @@ impl Gauge {
         };
         PrometheusOperation {
             name: self.name.to_owned(),
-            metric: Metrics::Gauge.into(),
             labels: self.labels.to_owned(),
             operation: Some(prometheus_operation::Operation::Gauge(op)),
         }
@@ -151,7 +147,6 @@ impl Gauge {
         };
         PrometheusOperation {
             name: self.name.to_owned(),
-            metric: Metrics::Gauge.into(),
             labels: self.labels.to_owned(),
             operation: Some(prometheus_operation::Operation::Gauge(op)),
         }
@@ -174,7 +169,6 @@ impl Gauge {
         };
         PrometheusOperation {
             name: self.name.to_owned(),
-            metric: Metrics::Gauge.into(),
             labels: self.labels.to_owned(),
             operation: Some(prometheus_operation::Operation::Gauge(op)),
         }

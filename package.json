@@ -7,7 +7,13 @@
         "substreams-sink-prometheus": "dist/bin/cli.js"
     },
     "repository": "git@github.com:pinax-network/substreams-sink-prometheus.git",
-    "keywords": [ "substreams", "streamingfast", "firehose", "thegraph", "pinax"],
+    "keywords": [
+        "substreams",
+        "streamingfast",
+        "firehose",
+        "thegraph",
+        "pinax"
+    ],
     "author": {
         "name": "Denis",
         "email": "denis@pinax.network"
@@ -33,7 +39,7 @@
         "commander": "10.x",
         "dotenv": "*",
         "prom-client": "14.x",
-        "substreams": "^0.3.1",
+        "substreams": "^0.3.2",
         "winston": "3.x"
     },
     "devDependencies": {

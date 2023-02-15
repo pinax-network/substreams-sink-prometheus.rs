@@ -12,10 +12,10 @@ const server = http.createServer(async (req, res) => {
     res.end(await register.metrics());
 });
 
-export async function listen(port: number) {
+export async function listen(port: number, address = "0.0.0.0") {
     return new Promise(resolve => {
-        server.listen(port, "0.0.0.0", () => {
-            console.log('starting prometheus metrics server', { port });
+        server.listen(port, address, () => {
+            console.log('starting prometheus metrics server', { address, port });
             resolve(true);
         });
     })

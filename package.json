@@ -19,7 +19,9 @@
             "email": "charles@pinax.network"
         }
     ],
-    "bin": "bin/index.js",
+    "bin": {
+        "substreams-sink-prometheus": "bin/cli.js"
+    },
     "license": "MIT OR Apache-2.0",
     "scripts": {
         "start": "ts-node-dev index.ts",

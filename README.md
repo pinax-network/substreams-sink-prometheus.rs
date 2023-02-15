@@ -16,11 +16,25 @@
 - [Substreams documentation](https://substreams.streamingfast.io)
 - [Prometheus documentation](https://prometheus.io)
 
-## Quickstart ⚡️
+## CLI
+[**Use pre-built binaries**](https://github.com/pinax-network/substreams-sink-prometheus/releases)
+- [x] MacOS
+- [x] Linux
+- [x] Windows
+
+**Install** globally via npm
+```
+$ npm install -g substreams-sink-prometheus
+```
+
+**Run**
+```
+$ substreams-sink-prometheus run [options] <spkg>
+```
 
 1. Install `npm install -g substreams-sink-prometheus`
 2. Run Sink `substreams-sink-prometheus run [<manifest>] [<module_name>] [flags]`
-3. Open the browser at [http://localhost:9102/metrics](http://localhost:9102/metrics)
+> Open the browser at [http://localhost:9102/metrics](http://localhost:9102/metrics)
 
 ## 🛠 Feature Roadmap
 

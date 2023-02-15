@@ -1,5 +1,4 @@
 {
-    "private": true,
     "name": "substreams-sink-prometheus",
     "version": "0.1.8",
     "description": "Substreams Prometheus sink module",

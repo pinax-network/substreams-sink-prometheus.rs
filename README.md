@@ -1,7 +1,3 @@
----
-description: Pinax Substreams Prometheus sink
----
-
 # [`Substreams`](https://substreams.streamingfast.io/) [Prometheus](https://prometheus.io/) sink module
 
 [<img alt="github" src="https://img.shields.io/badge/Github-substreams.prometheus-8da0cb?style=for-the-badge&logo=github" height="20">](https://github.com/pinax-network/substreams-sink-prometheus)

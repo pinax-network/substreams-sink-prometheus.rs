@@ -18,7 +18,7 @@ program.command('run')
     .option('-s --start-block <int>', 'Start block to stream from. Defaults to -1, which means the initialBlock of the first module you are streaming (default -1)')
     .option('-s --end-block <string>', 'Stop block to end stream at, inclusively. (default "0")')
     .option('-p --port <int>', 'Listens on port number.', '9102')
-    .option('-a --address <string>', 'Address to use', '0.0.0.0')
+    .option('-a --address <string>', 'Address to use', 'localhost')
     .action(run);
 
 program.command('completion').description('Generate the autocompletion script for the specified shell');

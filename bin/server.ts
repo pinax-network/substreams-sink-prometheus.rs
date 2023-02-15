@@ -1,5 +1,6 @@
 import client from "prom-client";
 import http from "node:http";
+import { logger } from "./logger";
 
 // Prometheus Exporter
 export const register = new client.Registry();
@@ -12,10 +13,10 @@ const server = http.createServer(async (req, res) => {
     res.end(await register.metrics());
 });
 
-export async function listen(port: number, address = "0.0.0.0") {
+export async function listen(port: number, address = "localhost") {
     return new Promise(resolve => {
         server.listen(port, address, () => {
-            console.log('starting prometheus metrics server', { address, port });
+            logger.log("info", `Prometheus metrics server listening on http://${address}:${port}`);
             resolve(true);
         });
     })

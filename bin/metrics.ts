@@ -1,9 +1,19 @@
 import { Counter, Gauge } from "prom-client";
 import { register } from "./server";
+import { Clock } from "substreams";
 
 export function handleOperation(promOp: PrometheusOperation<any>) {
     handleGauge(promOp);
     handleCounter(promOp)
+}
+
+export function handleClock(clock: Clock) {
+    registerGauge("last_block_number", "Last block number processed by Substreams Sink");
+    registerGauge("last_block_timestamp", "Last block timestamp (in seconds) processed by Substreams Sink");
+    const gauge1 = register.getSingleMetric("last_block_number") as Gauge;
+    const gauge2 = register.getSingleMetric("last_block_timestamp") as Gauge;
+    gauge1.set(Number(clock.number));
+    gauge2.set(Number(clock.timestamp?.seconds));
 }
 
 function handleCounter(promOp: PrometheusOperation<CounterOp>) {

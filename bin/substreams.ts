@@ -1,5 +1,5 @@
 import { Substreams, download } from "substreams";
-import { handleOperation } from "./metrics";
+import { handleClock, handleOperation } from "./metrics";
 import { listen } from "./server"
 
 export async function run(spkg: string, args: {
@@ -35,6 +35,11 @@ export async function run(spkg: string, args: {
     const PrometheusOperations = registry.findMessage(messageTypeName);
     if (!PrometheusOperations) throw new Error(`Could not find [${messageTypeName}] message type`);
     
+    // TO-DO change as `substreams.on("clock", clock => {})` once implemented
+    substreams.on("block", block => {
+        if ( block.clock) handleClock(block.clock);
+    });
+
     substreams.on("mapOutput", output => {
         // Handle Prometheus Operations
         if (!output.data.mapOutput.typeUrl.match(messageTypeName)) return;

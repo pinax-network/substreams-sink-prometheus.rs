@@ -15,8 +15,13 @@ program.name('substreams-sink-prometheus')
     
     program.command('run')
     .description('Fills Prometheus metrics from a substreams output and runs a Prometheus Exporter listener')
-    .option('--delay-before-start <duration>', '[OPERATOR] Amount of time in milliseconds (ms) to wait before starting any internal processes, can be used to perform to maintenance on the pod before actually letting it starts', '0')
-    .option('-e --substreams-endpoint <host>', 'Substreams gRPC endpoint', 'mainnet.eth.streamingfast.io:443')
+    .argument('<spkg>', 'URL or IPFS hash of Substreams package')
+    // .argument('<module>', 'Name of the output module (declared in the manifest)', "prom_out")
+
+    .option('--delay-before-start <int>', '[OPERATOR] Amount of time in milliseconds (ms) to wait before starting any internal processes, can be used to perform to maintenance on the pod before actually letting it starts', '0')
+    .option('-e --substreams-endpoint <string>', 'Substreams gRPC endpoint', 'mainnet.eth.streamingfast.io:443')
+    .option('-s --start-block <int>', 'Start block to stream from. Defaults to -1, which means the initialBlock of the first module you are streaming (default -1)')
+    .option('-s --end-block <string>', 'Stop block to end stream at, inclusively. (default "0")')
     .action(run);
 
 program.command('completion').description('Generate the autocompletion script for the specified shell');

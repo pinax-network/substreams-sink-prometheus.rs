@@ -2,18 +2,16 @@ import { Substreams, download } from "substreams";
 import { handleOperation } from "./metrics";
 import { listen } from "./server"
 
-export async function run(args: {
-    spkg?: string,
+export async function run(spkg: string, args: {
     outputModule?: string,
-    startBlockNum?: string,
+    startBlock?: string,
     substreamsEndpoint?: string,
 } = {}) {
     // User params
-    const spkg = "https://github.com/pinax-network/substreams/releases/download/eosmechanics-v0.3.3/eosmechanics-v0.3.3.spkg";
     const messageTypeName = "pinax.substreams.sink.prometheus.v1.PrometheusOperations";
-    const outputModule = args.outputModule ?? "prom_out";
-    const startBlockNum = args.startBlockNum ?? "292442484";
-    const host = args.substreamsEndpoint ?? "mainnet.eth.streamingfast.io:443";
+    const outputModule = "prom_out";
+    const startBlockNum = args.startBlock;
+    const host = args.substreamsEndpoint;
     
     // Initialize Substreams
     const substreams = new Substreams(outputModule, {

@@ -1,44 +1,23 @@
-import { Substreams, download } from "substreams";
-import { handleOperation } from "./metrics";
-import { listen } from "./server"
+import { Command } from "commander";
+import { run } from "./substreams";
+import pkg from "../package.json";
 
-export async function run(spkg: string, args: {
-    outputModule?: string,
-    startBlock?: string,
-    substreamsEndpoint?: string,
-} = {}) {
-    // User params
-    const messageTypeName = "pinax.substreams.sink.prometheus.v1.PrometheusOperations";
-    const outputModule = "prom_out";
-    const startBlockNum = args.startBlock;
-    const host = args.substreamsEndpoint;
+const program = new Command();
+program.name('substreams-sink-prometheus')
+    .version(pkg.version, '-v, --version', 'version for substreams-sink-prometheus')
     
-    // Initialize Substreams
-    const substreams = new Substreams(outputModule, {
-        host,
-        startBlockNum,
-        authorization: process.env.STREAMINGFAST_KEY // or SUBSTREAMS_API_TOKEN
-    });
+program.command('run')
+    .description('Fills Prometheus metrics from a substreams output and runs a Prometheus Exporter listener')
+    .argument('<spkg>', 'URL or IPFS hash of Substreams package')
+    // .argument('<module>', 'Name of the output module (declared in the manifest)', "prom_out")
+    .option('--delay-before-start <int>', '[OPERATOR] Amount of time in milliseconds (ms) to wait before starting any internal processes, can be used to perform to maintenance on the pod before actually letting it starts', '0')
+    .option('-e --substreams-endpoint <string>', 'Substreams gRPC endpoint', 'mainnet.eth.streamingfast.io:443')
+    .option('-s --start-block <int>', 'Start block to stream from. Defaults to -1, which means the initialBlock of the first module you are streaming (default -1)')
+    .option('-s --end-block <string>', 'Stop block to end stream at, inclusively. (default "0")')
+    .action(run);
 
-    // Initialize Prometheus server
-    listen(9102);
+program.command('completion').description('Generate the autocompletion script for the specified shell');
 
-    // Download Substream from URL or IPFS
-    const { modules, registry } = await download(spkg);
+program.command('help').description('Display help for command');
 
-    // Find Protobuf message types from registry
-    const PrometheusOperations = registry.findMessage(messageTypeName);
-    if (!PrometheusOperations) throw new Error(`Could not find [${messageTypeName}] message type`);
-    
-    substreams.on("mapOutput", output => {
-        // Handle Prometheus Operations
-        if (!output.data.mapOutput.typeUrl.match(messageTypeName)) return;
-        const decoded = PrometheusOperations.fromBinary(output.data.mapOutput.value);
-        for ( const operation of decoded.operations ) {
-            handleOperation(operation);
-        }
-    });
-
-    // start streaming Substream
-    await substreams.start(modules);
-}
+program.parse();

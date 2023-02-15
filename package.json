@@ -19,7 +19,7 @@
             "email": "charles@pinax.network"
         }
     ],
-    "bin": "index.js",
+    "bin": "bin/index.js",
     "license": "MIT OR Apache-2.0",
     "scripts": {
         "start": "ts-node-dev index.ts",

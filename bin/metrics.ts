@@ -1,6 +1,7 @@
 import { Counter, Gauge } from "prom-client";
-import { register } from "./server";
 import { Clock } from "substreams";
+import { register } from "./server";
+import { logger } from "./logger";
 
 export function handleOperation(promOp: PrometheusOperation<any>) {
     handleGauge(promOp);
@@ -32,7 +33,9 @@ function handleCounter(promOp: PrometheusOperation<CounterOp>) {
         case 2: counter.labels(labels).inc(value); break; // ADD
         case 7: counter.remove(labels); break; // REMOVE
         case 8: counter.reset(); break; // RESET
+        default: return; // SKIP
     }
+    logger.log("info", "counter", {name, labels, operation, value});
 }
 
 function handleGauge(promOp: PrometheusOperation<GaugeOp>) {
@@ -50,7 +53,9 @@ function handleGauge(promOp: PrometheusOperation<GaugeOp>) {
         case 6: gauge.labels(labels).setToCurrentTime(); break; // SET_TO_CURRENT_TIME
         case 7: gauge.remove(labels); break; // REMOVE
         case 8: gauge.reset(); break; // RESET
+        default: return;
     }
+    logger.log("info", "gauge", {name, labels, operation, value});
 }
 
 function registerCounter(name: string, help = "help", labelNames: string[] = []) {

@@ -6,3 +6,4 @@ target
 *-linux
 *-macos
 *-win.exe
+dist

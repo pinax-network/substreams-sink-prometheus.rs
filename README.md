@@ -32,8 +32,6 @@ $ npm install -g substreams-sink-prometheus
 $ substreams-sink-prometheus run [options] <spkg>
 ```
 
-1. Install `npm install -g substreams-sink-prometheus`
-2. Run Sink `substreams-sink-prometheus run [<manifest>] [<module_name>] [flags]`
 > Open the browser at [http://localhost:9102/metrics](http://localhost:9102/metrics)
 
 ## 🛠 Feature Roadmap

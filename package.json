@@ -1,13 +1,20 @@
 {
     "name": "substreams-sink-prometheus",
-    "version": "0.1.8",
+    "version": "0.1.8-1",
     "description": "Substreams Prometheus sink module",
-    "main": "bin/index.js",
+    "main": "dist/bin/cli.js",
+    "bin": {
+        "substreams-sink-prometheus": "dist/bin/cli.js"
+    },
     "repository": "git@github.com:pinax-network/substreams-sink-prometheus.git",
+    "keywords": [ "substreams", "streamingfast", "firehose", "thegraph", "pinax"],
     "author": {
         "name": "Denis",
         "email": "denis@pinax.network"
     },
+    "files": [
+        "dist"
+    ],
     "contributors": [
         {
             "name": "Denis",
@@ -18,12 +25,8 @@
             "email": "charles@pinax.network"
         }
     ],
-    "bin": {
-        "substreams-sink-prometheus": "bin/cli.js"
-    },
     "license": "MIT OR Apache-2.0",
     "scripts": {
-        "start": "ts-node-dev index.ts",
         "build": "tsc && pkg ."
     },
     "dependencies": {

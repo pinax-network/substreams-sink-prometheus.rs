@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import { Command } from "commander";
 import { run } from "./substreams";
 import pkg from "../package.json";

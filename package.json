@@ -1,6 +1,6 @@
 {
     "name": "substreams-sink-prometheus",
-    "version": "0.1.8-6",
+    "version": "0.1.8-7",
     "description": "Substreams Prometheus sink module",
     "main": "dist/bin/cli.js",
     "bin": {
@@ -33,6 +33,7 @@
     ],
     "license": "MIT OR Apache-2.0",
     "scripts": {
+        "prepublishOnly": "tsc",
         "build": "tsc && pkg ."
     },
     "dependencies": {

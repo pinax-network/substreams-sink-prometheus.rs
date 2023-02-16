@@ -1,4 +1,4 @@
-import { Counter, Gauge } from "prom-client";
+import { Counter, Gauge, Histogram, Summary } from "prom-client";
 import { Clock } from "substreams";
 import { register } from "./server";
 import { logger } from "./logger";
@@ -69,6 +69,29 @@ function registerCounter(name: string, help = "help", labelNames: string[] = [])
 function registerGauge(name: string, help = "help", labelNames: string[] = []) {
     try {
         register.registerMetric(new Gauge({name, help, labelNames}));
+    } catch (e) {
+        //
+    }
+}
+
+function registerHistogram(name: string, help = "help", labelNames: string[] = []) {
+    // TO-DO extract from substreams.yaml as config
+    const buckets = [0.001, 0.01, 0.1, 1, 2, 5];
+    try {
+        register.registerMetric(new Histogram({name, help, labelNames, buckets}));
+    } catch (e) {
+        //
+    }
+}
+
+function registerSummary(name: string, help = "help", labelNames: string[] = []) {
+    // TO-DO extract from substreams.yaml as config
+    const percentiles = [0.01, 0.1, 0.9, 0.99];
+	const maxAgeSeconds: number = 600;
+	const ageBuckets: number = 5;
+	const compressCount: number = 1;
+    try {
+        register.registerMetric(new Summary({name, help, labelNames, percentiles, maxAgeSeconds, ageBuckets, compressCount}));
     } catch (e) {
         //
     }

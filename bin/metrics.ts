@@ -3,9 +3,11 @@ import { Clock } from "substreams";
 import { register } from "./server";
 import { logger } from "./logger";
 
-export function handleOperation(promOp: PrometheusOperation<any>) {
+export function handleOperation(promOp: PrometheusOperation) {
     handleGauge(promOp);
-    handleCounter(promOp)
+    handleCounter(promOp);
+    handleSummary(promOp);
+    handleHistogram(promOp);
 }
 
 export function handleClock(clock: Clock) {
@@ -21,7 +23,7 @@ export function handleClock(clock: Clock) {
     gauge3.set(head_block_drift > 0 ? head_block_drift : 0);
 }
 
-function handleCounter(promOp: PrometheusOperation<CounterOp>) {
+function handleCounter(promOp: PrometheusOperation) {
     if ( promOp.operation.case != "counter") return;
     const { name, labels } = promOp;
     registerCounter(name, "custom help", Object.keys(labels)); // TO-DO!
@@ -38,7 +40,7 @@ function handleCounter(promOp: PrometheusOperation<CounterOp>) {
     logger.log("info", "counter", {name, labels, operation, value});
 }
 
-function handleGauge(promOp: PrometheusOperation<GaugeOp>) {
+function handleGauge(promOp: PrometheusOperation) {
     if ( promOp.operation.case != "gauge") return;
     const { name, labels } = promOp;
     registerGauge(name, "custom help", Object.keys(labels)); // TO-DO!
@@ -53,9 +55,42 @@ function handleGauge(promOp: PrometheusOperation<GaugeOp>) {
         case 6: gauge.labels(labels).setToCurrentTime(); break; // SET_TO_CURRENT_TIME
         case 7: gauge.remove(labels); break; // REMOVE
         case 8: gauge.reset(); break; // RESET
-        default: return;
+        default: return; // SKIP
     }
     logger.log("info", "gauge", {name, labels, operation, value});
+}
+
+function handleSummary(promOp: PrometheusOperation) {
+    if ( promOp.operation.case != "summary") return;
+    const { name, labels } = promOp;
+    registerSummary(name, "custom help", Object.keys(labels)); // TO-DO!
+    const { operation, value } = promOp.operation.value;
+    let summary = register.getSingleMetric(promOp.name) as Summary;
+    switch (operation) {
+        case 1: summary.labels(labels).observe(value); break; // OBSERVE
+        case 2: summary.labels(labels).startTimer(); break; // START_TIMER
+        case 7: summary.remove(labels); break; // REMOVE
+        case 8: summary.reset(); break; // RESET
+        default: return; // SKIP
+    }
+    logger.log("info", "summary", {name, labels, operation, value});
+}
+
+function handleHistogram(promOp: PrometheusOperation) {
+    if ( promOp.operation.case != "histogram") return;
+    const { name, labels } = promOp;
+    registerHistogram(name, "custom help", Object.keys(labels)); // TO-DO!
+    const { operation, value } = promOp.operation.value;
+    let histogram = register.getSingleMetric(promOp.name) as Histogram;
+    switch (operation) {
+        case 1: histogram.labels(labels).observe(value); break; // OBSERVE
+        case 2: histogram.labels(labels).startTimer(); break; // START_TIMER
+        case 3: histogram.zero(labels); break; // ZERO
+        case 7: histogram.remove(labels); break; // REMOVE
+        case 8: histogram.reset(); break; // RESET
+        default: return; // SKIP
+    }
+    logger.log("info", "histogram", {name, labels, operation, value});
 }
 
 function registerCounter(name: string, help = "help", labelNames: string[] = []) {
@@ -78,7 +113,7 @@ function registerHistogram(name: string, help = "help", labelNames: string[] = [
     // TO-DO extract from substreams.yaml as config
     const buckets = [0.001, 0.01, 0.1, 1, 2, 5];
     try {
-        register.registerMetric(new Histogram({name, help, labelNames, buckets}));
+        register.registerMetric(new Histogram({name, help, labelNames}));
     } catch (e) {
         //
     }
@@ -91,24 +126,17 @@ function registerSummary(name: string, help = "help", labelNames: string[] = [])
 	const ageBuckets: number = 5;
 	const compressCount: number = 1;
     try {
-        register.registerMetric(new Summary({name, help, labelNames, percentiles, maxAgeSeconds, ageBuckets, compressCount}));
+        register.registerMetric(new Summary({name, help, labelNames}));
     } catch (e) {
         //
     }
 }
 
-interface PrometheusOperation<T = any> {
+interface PrometheusOperation {
     name: string
     labels: {[key: string]: string},
-    operation: T
-}
-
-interface GaugeOp {
-    case: "gauge",
-    value: { operation: number, value: number }
-}
-
-interface CounterOp {
-    case: "counter",
-    value: { operation: number, value: number }
+    operation: {
+        case: "gauge" | "counter" | "summary" | "histogram",
+        value: { operation: number, value: number }
+    }
 }

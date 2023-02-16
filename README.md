@@ -54,17 +54,18 @@ $ substreams-sink-prometheus run [options] <spkg>
 - [x] Reset
 
 ### [Histogram Metric](https://pkg.go.dev/github.com/prometheus/client_golang/prometheus#Histogram)
-- [ ] Observe
-- [ ] buckets
-- [ ] zero
+- [x] Observe
+  - [ ] buckets
+- [x] Zero
 
 ### [Summary Metric](https://pkg.go.dev/github.com/prometheus/client_golang/prometheus#Summary)
 > Summaries calculate percentiles of observed values.
-- [ ] Observe
-- [ ] percentiles
-- [ ] maxAgeSeconds
-- [ ] ageBuckets
-- [ ] startTimer
+- [x] Observe
+  - [ ] percentiles
+  - [ ] maxAgeSeconds
+  - [ ] ageBuckets
+  - [ ] compressCount
+- [x] StartTimer
 
 ### [Registry](https://pkg.go.dev/github.com/prometheus/client_golang/prometheus#Registry)
 - [ ] Clear
@@ -93,7 +94,7 @@ substreams-sink-prometheus = "0.1"
 use std::collections::HashMap;
 use substreams::prelude::*;
 use substreams::errors::Error;
-use substreams_sink_prometheus::{PrometheusOperations, Counter, Gauge};
+use substreams_sink_prometheus::{PrometheusOperations, Counter, Gauge, Summary, Histogram};
 
 #[substreams::handlers::map]
 fn prom_out(
@@ -136,11 +137,11 @@ fn prom_out(
     // Decrements the Gauge by 1.
     prom_ops.push(gauge.dec());
 
-    // Adds an arbitrary value to a Gauge. (The value can be negative, resulting in a   rease of the Gauge.)
+    // Adds an arbitrary value to a Gauge. (The value can be negative, resulting in a decrease of the Gauge.)
     prom_ops.push(gauge.add(50.0));
     prom_ops.push(gauge.add(-10.0));
 
-    // Subtracts arbitrary value from the Gauge. (The value can be negative, resulting in an    rease of the Gauge.)
+    // Subtracts arbitrary value from the Gauge. (The value can be negative, resulting in an increase of the Gauge.)
     prom_ops.push(gauge.sub(25.0));
     prom_ops.push(gauge.sub(-5.0));
 
@@ -152,6 +153,35 @@ fn prom_out(
 
     // Reset gauge values
     prom_ops.push(gauge.reset());
+
+    // Summary Metric
+    // ==============
+    // Initialize Summary
+    let mut summary = Summary::from("summary_name");
+
+    /// Observe adds a single observation to the summary.
+    /// Observations are usually positive or zero.
+    /// Negative observations are accepted but prevent current versions of Prometheus from properly detecting counter resets in the sum of observations
+    prom_ops.push(summary.observe(88.8));
+
+    // Start a timer. Calling the returned function will observe the duration in seconds in the summary.
+    prom_ops.push(summary.start_timer());
+
+    // Histogram Metric
+    // ==============
+    // Initialize Summary
+    let mut histogram = Histogram::from("histogram_name");
+
+    /// Observe adds a single observation to the histogram.
+    /// Observations are usually positive or zero.
+    /// Negative observations are accepted but prevent current versions of Prometheus from properly detecting counter resets in the sum of observations
+    prom_ops.push(histogram.observe(88.8));
+
+    // Start a timer. Calling the returned function will observe the duration in seconds in the histogram.
+    prom_ops.push(histogram.start_timer());
+
+    // Initialize the metrics for the given combination of labels to zero
+    prom_ops.push(histogram.zero(HashMap::from([("label1".to_string(), "value1".to_string())])));
 
     Ok(prom_ops)
 }

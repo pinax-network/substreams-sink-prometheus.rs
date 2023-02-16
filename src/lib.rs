@@ -21,17 +21,18 @@
 //! - [x] Add
 //!
 //! ### [Histogram Metric](https://pkg.go.dev/github.com/prometheus/client_golang/prometheus#Histogram)
-//! - [ ] Observe
-//! - [ ] buckets
-//! - [ ] zero
-//!
+//! - [x] Observe
+//!   - [ ] buckets
+//! - [x] Zero
+//! 
 //! ### [Summary Metric](https://pkg.go.dev/github.com/prometheus/client_golang/prometheus#Summary)
 //! > Summaries calculate percentiles of observed values.
-//! - [ ] Observe
-//! - [ ] percentiles
-//! - [ ] maxAgeSeconds
-//! - [ ] ageBuckets
-//! - [ ] startTimer
+//! - [x] Observe
+//!   - [ ] percentiles
+//!   - [ ] maxAgeSeconds
+//!   - [ ] ageBuckets
+//!   - [ ] compressCount
+//! - [x] StartTimer
 //!
 //! ### [Registry](https://pkg.go.dev/github.com/prometheus/client_golang/prometheus#Summary)
 //! - [ ] Clear
@@ -41,7 +42,7 @@
 //! ### Example
 //! ```
 //! use std::collections::HashMap;
-//! use substreams_sink_prometheus::{PrometheusOperations, Gauge, Counter};
+//! use substreams_sink_prometheus::{PrometheusOperations, Gauge, Counter, Summary, Histogram};
 //!
 //! // Initialize Prometheus Operations container
 //! let mut prom_ops: PrometheusOperations = Default::default();
@@ -95,6 +96,35 @@
 //! 
 //! // Reset gauge values
 //! prom_ops.push(gauge.reset());
+//! 
+//! // Summary Metric
+//! // ==============
+//! // Initialize Summary
+//! let mut summary = Summary::from("summary_name");
+//!
+//! /// Observe adds a single observation to the summary.
+//! /// Observations are usually positive or zero.
+//! /// Negative observations are accepted but prevent current versions of Prometheus from properly detecting counter resets in the sum of observations
+//! prom_ops.push(summary.observe(88.8));
+//! 
+//! // Start a timer. Calling the returned function will observe the duration in seconds in the summary.
+//! prom_ops.push(summary.start_timer());
+//! 
+//! // Histogram Metric
+//! // ==============
+//! // Initialize Summary
+//! let mut histogram = Histogram::from("histogram_name");
+//!
+//! /// Observe adds a single observation to the histogram.
+//! /// Observations are usually positive or zero.
+//! /// Negative observations are accepted but prevent current versions of Prometheus from properly detecting counter resets in the sum of observations
+//! prom_ops.push(histogram.observe(88.8));
+//! 
+//! // Start a timer. Calling the returned function will observe the duration in seconds in the histogram.
+//! prom_ops.push(histogram.start_timer());
+//! 
+//! // Initialize the metrics for the given combination of labels to zero
+//! prom_ops.push(histogram.zero(HashMap::from([("label1".to_string(), "value1".to_string())])));
 //! ```
 #[path = "pb/pinax.substreams.sink.prometheus.v1.rs"]
 #[allow(dead_code)]
@@ -106,5 +136,9 @@ mod helpers;
 pub use self::counter::*;
 mod gauge;
 pub use self::gauge::*;
+mod summary;
+pub use self::summary::*;
+mod histogram;
+pub use self::histogram::*;
 mod labels;
 pub use self::labels::*;

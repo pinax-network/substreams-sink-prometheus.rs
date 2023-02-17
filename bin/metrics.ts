@@ -11,16 +11,16 @@ export function handleOperation(promOp: PrometheusOperation) {
 }
 
 export function handleClock(clock: Clock) {
-    registerGauge("last_block_number", "Last block number processed by Substreams Sink");
-    registerGauge("last_block_timestamp", "Last block timestamp (in seconds) processed by Substreams Sink");
+    registerGauge("head_block_number", "Last block number processed by Substreams Sink");
+    registerGauge("head_block_timestamp", "Last block timestamp (in seconds) processed by Substreams Sink");
     registerGauge("head_block_drift", "Head block drift (in seconds) by Substreams Sink");
-    const gauge1 = register.getSingleMetric("last_block_number") as Gauge;
-    const gauge2 = register.getSingleMetric("last_block_timestamp") as Gauge;
-    const gauge3 = register.getSingleMetric("head_block_drift") as Gauge;
+    const gauge1 = register.getSingleMetric("head_block_number") as Gauge;
+    const gauge2 = register.getSingleMetric("head_block_timestamp") as Gauge;
+    const gauge3 = register.getSingleMetric("head_block_time_drift") as Gauge;
     gauge1.set(Number(clock.number));
     gauge2.set(Number(clock.timestamp?.seconds));
-    const head_block_drift = Math.floor(new Date().getTime() / 1000) - Number(clock.timestamp?.seconds);
-    gauge3.set(head_block_drift > 0 ? head_block_drift : 0);
+    const head_block_time_drift = Math.floor(new Date().getTime() / 1000) - Number(clock.timestamp?.seconds);
+    gauge3.set(head_block_time_drift > 0 ? head_block_time_drift : 0);
 }
 
 function handleCounter(promOp: PrometheusOperation) {

@@ -8,3 +8,4 @@ target
 *-win.exe
 dist
 *.log
+data

@@ -1,0 +1,30 @@
+name: Release
+on: [push]
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: supplypike/setup-bin@v3
+        with:
+          uri: https://github.com/streamingfast/substreams/releases/download/v0.2.0/substreams_linux_x86_64.tar.gz
+          name: substreams
+          version: v0.2.0
+
+      - name: Compile WASM Substream
+        run: make
+
+      - name: Compile Sink executable
+        run: npm ci
+        run: npm run build
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: |
+            *.spkg
+            *-linux
+            *-macos
+            *-win.exe

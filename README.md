@@ -1,9 +1,9 @@
 # [`Substreams`](https://substreams.streamingfast.io/) [Prometheus](https://prometheus.io/) sink module (**Rust**)
 
-[<img alt="github" src="https://img.shields.io/badge/Github-substreams.prometheus-8da0cb?style=for-the-badge&logo=github" height="20">](https://github.com/pinax-network/substreams-sink-prometheus)
+[<img alt="github" src="https://img.shields.io/badge/Github-substreams.prometheus-8da0cb?style=for-the-badge&logo=github" height="20">](https://github.com/pinax-network/substreams-sink-prometheus.rs)
 [<img alt="crates.io" src="https://img.shields.io/crates/v/substreams-sink-prometheus.svg?style=for-the-badge&color=fc8d62&logo=rust" height="20">](https://crates.io/crates/substreams-sink-prometheus)
 [<img alt="docs.rs" src="https://img.shields.io/badge/docs.rs-substreams.prometheus-66c2a5?style=for-the-badge&labelColor=555555&logo=docs.rs" height="20">](https://docs.rs/substreams-sink-prometheus)
-[<img alt="GitHub Workflow Status" src="https://img.shields.io/github/actions/workflow/status/pinax-network/substreams-sink-prometheus/ci.yml?branch=main&style=for-the-badge" height="20">](https://github.com/pinax-network/substreams-sink-prometheus/actions?query=branch%3Amain)
+[<img alt="GitHub Workflow Status" src="https://img.shields.io/github/actions/workflow/status/pinax-network/substreams-sink-prometheus.rs/ci.yml?branch=main&style=for-the-badge" height="20">](https://github.com/pinax-network/substreams-sink-prometheus.rs/actions?query=branch%3Amain)
 
 > `pinax.substreams.sink.prometheus.v1` protobuf module for [`Substreams`](https://substreams.streamingfast.io/) Rust implementation.
 
@@ -13,8 +13,9 @@
 
 ### Further resources
 
-- [Substreams documentation](https://substreams.streamingfast.io)
-- [Prometheus documentation](https://prometheus.io)
+- [**Substreams** documentation](https://substreams.streamingfast.io)
+- [**Prometheus** documentation](https://prometheus.io)
+- [**Substreams Sink Prometheus** CLI `Node.js`](https://github.com/pinax-network/substreams-sink-prometheus)
 
 ## 🛠 Feature Roadmap
 

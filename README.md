@@ -1,12 +1,11 @@
-# [`Substreams`](https://substreams.streamingfast.io/) [Prometheus](https://prometheus.io/) sink module
+# [`Substreams`](https://substreams.streamingfast.io/) [Prometheus](https://prometheus.io/) sink module (**Rust**)
 
 [<img alt="github" src="https://img.shields.io/badge/Github-substreams.prometheus-8da0cb?style=for-the-badge&logo=github" height="20">](https://github.com/pinax-network/substreams-sink-prometheus)
 [<img alt="crates.io" src="https://img.shields.io/crates/v/substreams-sink-prometheus.svg?style=for-the-badge&color=fc8d62&logo=rust" height="20">](https://crates.io/crates/substreams-sink-prometheus)
-[<img alt="npm" src="https://img.shields.io/npm/v/substreams-sink-prometheus.svg?style=for-the-badge&color=CB0001&logo=npm" height="20">](https://www.npmjs.com/package/substreams-sink-prometheus)
 [<img alt="docs.rs" src="https://img.shields.io/badge/docs.rs-substreams.prometheus-66c2a5?style=for-the-badge&labelColor=555555&logo=docs.rs" height="20">](https://docs.rs/substreams-sink-prometheus)
 [<img alt="GitHub Workflow Status" src="https://img.shields.io/github/actions/workflow/status/pinax-network/substreams-sink-prometheus/ci.yml?branch=main&style=for-the-badge" height="20">](https://github.com/pinax-network/substreams-sink-prometheus/actions?query=branch%3Amain)
 
-> `substreams-sink-prometheus` is a tool that allows developers to pipe data extracted metrics from a blockchain into a Prometheus time series database.
+> `pinax.substreams.sink.prometheus.v1` protobuf module for [`Substreams`](https://substreams.streamingfast.io/) Rust implementation.
 
 ## 📖 Documentation
 
@@ -16,24 +15,6 @@
 
 - [Substreams documentation](https://substreams.streamingfast.io)
 - [Prometheus documentation](https://prometheus.io)
-
-## CLI
-[**Use pre-built binaries**](https://github.com/pinax-network/substreams-sink-prometheus/releases)
-- [x] MacOS
-- [x] Linux
-- [x] Windows
-
-**Install** globally via npm
-```
-$ npm install -g substreams-sink-prometheus
-```
-
-**Run**
-```
-$ substreams-sink-prometheus run [options] <spkg>
-```
-
-> Open the browser at [http://localhost:9102/metrics](http://localhost:9102/metrics)
 
 ## 🛠 Feature Roadmap
 

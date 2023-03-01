@@ -2,7 +2,7 @@ specVersion: v0.1.0
 package:
   name: substreams_sink_prometheus
   version: v0.1.9
-  url: https://github.com/pinax-network/substreams-sink-prometheus
+  url: https://github.com/pinax-network/substreams-sink-prometheus.rs
   doc: Substreams Sink to Prometheus
 
 protobuf:
